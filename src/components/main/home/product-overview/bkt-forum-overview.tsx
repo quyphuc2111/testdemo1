@@ -7,19 +7,22 @@ type BKTForumOverviewProps = {
 const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
   return (
     <motion.div className="w-max h-max flex items-center gap-x-64 mt-56">
-      <motion.img
-        src="/forum-1.svg"
-        loading="lazy"
-        width={700}
-        height={531}
-        initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
-        whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position
-        transition={{
-          duration: 0.8,
-          delay: 0.5, // Delay to sync with the list items
-          ease: "easeOut", // Smooth easing
-        }}
-      />
+      <div className="rounded-xl overflow-hidden">
+        <motion.img
+          className="rounded-xl"
+          src="/forum-1.svg"
+          loading="lazy"
+          width={700}
+          height={531}
+          initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
+          whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position
+          transition={{
+            duration: 0.8,
+            delay: 0.5, // Delay to sync with the list items
+            ease: "easeOut", // Smooth easing
+          }}
+        />
+      </div>
 
       <section>
         <motion.h1

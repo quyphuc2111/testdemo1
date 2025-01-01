@@ -45,19 +45,22 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
         </motion.ul>
       </section>
 
-      <motion.img
-        src="/lms-1.svg"
-        loading="lazy"
-        width={700}
-        height={531}
-        initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and off to the right
-        whileInView={{ opacity: 1, x: 0 }} // Slide in and fade in when it comes into view
-        transition={{
-          duration: 0.8,
-          delay: 0.5, // Delay to match the list items
-          ease: "easeOut", // Smooth easing
-        }}
-      />
+      <div className="rounded-xl overflow-hidden">
+        <motion.img
+          src="/lms-1.svg"
+          className="rounded-xl"
+          loading="lazy"
+          width={700}
+          height={531}
+          initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and off to the right
+          whileInView={{ opacity: 1, x: 0 }} // Slide in and fade in when it comes into view
+          transition={{
+            duration: 0.8,
+            delay: 0.5, // Delay to match the list items
+            ease: "easeOut", // Smooth easing
+          }}
+        />
+      </div>
     </motion.div>
   );
 };

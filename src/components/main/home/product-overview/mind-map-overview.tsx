@@ -49,20 +49,23 @@ const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
         </section>
 
         <AnimatePresence>
-          <motion.img
-            src="/mindmap-1.svg"
-            loading="lazy"
-            width={700}
-            height={531}
-            initial={{ opacity: 0, x: 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
-            transition={{
-              duration: 0.7,
-              ease: "easeOut",
-              delay: 0.5,
-            }}
-          />
+          <div className="rounded-xl overflow-hidden">
+            <motion.img
+              className="rounded-xl"
+              src="/mindmap-1.svg"
+              loading="lazy"
+              width={700}
+              height={531}
+              initial={{ opacity: 0, x: 100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 100 }}
+              transition={{
+                duration: 0.7,
+                ease: "easeOut",
+                delay: 0.5,
+              }}
+            />
+          </div>
         </AnimatePresence>
       </motion.div>
     </div>

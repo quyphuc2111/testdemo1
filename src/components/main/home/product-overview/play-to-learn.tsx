@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import TypingEffect from "react-typing-effect";
 
 type PlayToLearnProps = {
@@ -7,19 +6,9 @@ type PlayToLearnProps = {
 };
 
 const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
-  const [typingDone, setTypingDone] = useState(false);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTypingDone(true); // Sau 2s, kích hoạt typing cho các mục li
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <motion.div
-      className="w-full h-[1080px] flex items-center justify-center gap-x-64 mt-60 bg-play-and-learn-background bg-no-repeat bg-contain"
+      className="w-full h-[1080px] flex items-center justify-center gap-x-52 mt-60 bg-play-and-learn-background bg-no-repeat bg-contain"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
@@ -30,7 +19,6 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
       }}
     >
       <motion.section
-        className="min-w-[700px]"
         initial={{ opacity: 0, y: 50, rotate: -15 }}
         animate={{ opacity: 1, y: 0, rotate: 0 }}
         transition={{
@@ -81,7 +69,7 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{
                 duration: 0.5,
-                delay: typingDone ? 0.3 + index * 0.2 : 0,
+                delay: index * 0.2,
               }}
             >
               <motion.div
@@ -105,57 +93,33 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{
-                  delay: typingDone ? 0.5 + index * 0.2 : 0, // Delay cho phần text của li
+                  delay: index * 0.2, // Delay cho phần text của li
                   duration: 0.7,
                   ease: "easeInOut",
                 }}
               >
-                {typingDone ? (
-                  <TypingEffect
-                    text={feature.title}
-                    speed={90}
-                    typingDelay={500}
-                    eraseSpeed={100}
-                    displayTextRenderer={(text) => <span>{text}</span>}
-                  />
-                ) : (
-                  <span>{feature.title}</span> // Nếu chưa hoàn thành typing tiêu đề thì không hiển thị typing
-                )}
+                <p>{feature.title}</p>
               </motion.span>
             </motion.li>
           ))}
         </motion.ul>
       </motion.section>
 
-      <motion.div
-        className=""
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 100 }}
-        viewport={{ amount: 0.5 }}
-        transition={{
-          duration: 1.2,
-          ease: "easeOut",
-        }}
-      >
+      <div className="rounded-xl overflow-hidden">
         <motion.img
+          className="rounded-xl"
           src="/playtolearn-1.svg"
           loading="lazy"
-          width={700}
-          height={531}
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{
-            opacity: 1,
-            scale: 1.1,
-          }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          viewport={{ amount: 0.5 }}
+          width={680}
+          height={600}
+          initial={{ opacity: 0, scale: 0.8, x: 50 }}
+          whileInView={{ opacity: 1, scale: 1, x: 0 }}
           transition={{
-            duration: 1.5,
+            duration: 0.7,
             ease: "easeOut",
           }}
         />
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

@@ -13,20 +13,21 @@ const StemOverview: React.FC<steamComponentProps> = (props) => {
       whileInView={{ opacity: 1 }} // Appear when in the viewport
       transition={{ duration: 1, ease: "easeInOut" }} // Apply the same duration and easing as the "Mindmap" section
     >
-      <motion.img
-        src="/stem-1.svg"
-        loading="lazy"
-        width={700}
-        height={531}
-        initial={{ opacity: 0, x: -100 }} // Start from the left
-        whileInView={{ opacity: 1, x: 0 }} // Move to its original position when in view
-        exit={{ opacity: 0, x: -100 }} // Fade out when exiting
-        transition={{
-          duration: 0.7,
-          ease: "easeOut",
-          delay: 0.5, // Apply a similar delay
-        }}
-      />
+      <div className="rounded-xl overflow-hidden">
+        <motion.img
+          className="rounded-xl"
+          src="/stem-1.svg"
+          loading="lazy"
+          width={680}
+          height={600}
+          initial={{ opacity: 0, scale: 0.8, x: 50 }}
+          whileInView={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{
+            duration: 0.7,
+            ease: "easeOut",
+          }}
+        />
+      </div>
 
       <section className="-translate-y-12">
         <motion.h1
@@ -77,13 +78,7 @@ const StemOverview: React.FC<steamComponentProps> = (props) => {
                   ease: "easeInOut",
                 }}
               >
-                <TypingEffect
-                  text={feature.title}
-                  speed={90}
-                  typingDelay={500}
-                  eraseSpeed={100}
-                  displayTextRenderer={(text) => <span>{text}</span>}
-                />
+                <p>{feature.title}</p>
               </motion.span>
             </motion.li>
           ))}
