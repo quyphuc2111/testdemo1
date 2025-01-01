@@ -1,13 +1,13 @@
 import BannerTop from "../../components/main/home/banner-top";
-import ProductionOverview from "../../components/main/home/production-overview";
 import CarouselFeatures from "../../components/main/home/carousel-features";
+import ProductionOverviewWrapper from "../../components/main/home/production-overview-wrapper";
 
 const HomePage = () => {
   return (
     <>
       <BannerTop />
       <CarouselFeatures />
-      <ProductionOverview />
+      <ProductionOverviewWrapper />
     </>
   );
 };

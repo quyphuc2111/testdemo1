@@ -1,3 +1,4 @@
+import { motion } from "motion/react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import styled from "styled-components";
@@ -58,37 +59,9 @@ const carouselItems: Array<{
     bgColor: "#ADFFFE",
     borderColor: "#7DF5F5",
   },
-  {
-    image: "/virtual-class.png",
-    title: "Hệ thống LMS",
-    bgColor: "#FFEED8",
-    borderColor: "#FFDEA8",
-  },
-  {
-    image: "/information.png",
-    title: "Diễn đàn",
-    bgColor: "#E8F1FF",
-    borderColor: "#DAEBFF",
-  },
-  {
-    image: "/arcade-machine.png",
-    title: "Chơi mà học",
-    bgColor: "#EBDAFF",
-    borderColor: "#DFC6FF",
-  },
-  {
-    image: "/meta.png",
-    title: "STEM",
-    bgColor: "#FFECF2",
-    borderColor: "#FFD8E8",
-  },
-  {
-    image: "/mindmap.png",
-    title: "Mindmap",
-    bgColor: "#ADFFFE",
-    borderColor: "#7DF5F5",
-  },
 ];
+
+const repeatedCarouselItems = new Array(10).fill(carouselItems).flat();
 
 const CarouselCustom = styled(Carousel)`
   .react-multiple-carousel__arrow.react-multiple-carousel__arrow--right {
@@ -106,20 +79,31 @@ const CarouselCustom = styled(Carousel)`
 
 const CarouselFeatures = () => {
   return (
-    <div className="h-[600px] flex flex-col items-center ">
-      <h1 className="font-normal text-[48px] text-center mt-20">
+    <motion.div className="h-[600px] flex flex-col items-center">
+      <motion.h1
+        className="font-normal text-[48px] text-center mt-20"
+        initial={{ opacity: 0, y: -50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
         SẢN PHẨM CỦA BKT EDU
-      </h1>
+      </motion.h1>
 
       {/* carousel */}
-      <div className="relative w-max h-max mt-11 ">
-        <img
+      <div className="relative w-max h-max mt-11">
+        <motion.img
           src="/xanh-icon-1.svg"
-          className="absolute -top-5 -left-16 transform -translate-y-1/2 "
+          className="absolute -top-5 -left-16 transform -translate-y-1/2"
+          initial={{ x: -100, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
         />
-        <img
+        <motion.img
           src="/xanh-icon-2.svg"
-          className="absolute -bottom-20 -right-10 transform  "
+          className="absolute -bottom-20 -right-10 transform"
+          initial={{ x: 100, opacity: 0 }}
+          whileInView={{ x: 0, opacity: 1 }}
+          transition={{ duration: 1 }}
         />
 
         <CarouselCustom
@@ -127,27 +111,49 @@ const CarouselFeatures = () => {
           draggable={true}
           responsive={responsive}
           infinite={true}
-          className=" w-[1380px] px-10"
+          className="w-[1380px] px-10"
           itemClass="w-max"
         >
-          {carouselItems.map((item, index) => (
-            <div
-              key={index}
-              className="w-[280px] h-[285px] flex flex-col gap-y-5 items-center justify-center rounded-3xl"
-              style={{
-                backgroundColor: item.bgColor,
-                border: `1px solid ${item.borderColor}`,
-              }}
-            >
-              <img src={item.image} width={150} height={150} />
-              <p className="text-center  text-[24px] font-normal">
-                {item.title}
-              </p>
-            </div>
-          ))}
+          {repeatedCarouselItems.map((item, index) => {
+            return (
+              <motion.div
+                key={index}
+                className="w-[280px] h-[285px] flex flex-col gap-y-5 items-center justify-center rounded-3xl"
+                style={{
+                  backgroundColor: item.bgColor,
+                  border: `1px solid ${item.borderColor}`,
+                }}
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{
+                  duration: 0.5,
+                }}
+              >
+                <motion.img
+                  src={item.image}
+                  width={150}
+                  height={150}
+                  className="transition-all duration-300 transform hover:scale-110"
+                  whileHover={{ scale: 1.1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                />
+                <motion.p
+                  className="text-center text-[24px] font-normal"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {item.title}
+                </motion.p>
+              </motion.div>
+            );
+          })}
         </CarouselCustom>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

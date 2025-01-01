@@ -36,6 +36,45 @@ const forumListFeatures: Array<{ title: string }> = [
   },
 ];
 
+const playToLearnListFeatures: Array<{ title: string }> = [
+  {
+    title: "Khám phá trò chơi học tập sáng tạo",
+  },
+
+  {
+    title: "Học qua các trò chơi tương tác",
+  },
+
+  {
+    title: "Rèn luyện kỹ năng qua trò chơi thú vị",
+  },
+
+  {
+    title: "Trò chơi giúp phát triển tư duy sáng tạo",
+  },
+];
+
+const stemListFeatures: Array<{ title: string }> = [
+  {
+    title: "Lập trình",
+  },
+
+  {
+    title: "Vẽ mạch điện",
+  },
+
+  {
+    title: "Vẽ mạch điện",
+  },
+
+  {
+    title: "Vẽ mạch điện",
+  },
+  {
+    title: "Vẽ mạch điện",
+  },
+];
+
 const mindMapFeatures: Array<{ title: string }> = [
   {
     title: "Tạo cấu trúc phân cấp trực quan",
@@ -189,4 +228,6 @@ export {
   forumListFeatures,
   mindMapFeatures,
   whyUsListFeatures,
+  playToLearnListFeatures,
+  stemListFeatures,
 };
