@@ -11,6 +11,11 @@ export default {
         "play-and-learn-background": "url('/play-and-learn.svg')",
         "stem-background": "url('/STEM.svg')",
         "mindmap-background": "url('/Mindmap.svg')",
+        "round-1-background": "url('/vong-1.svg')",
+        "round-2-background": "url('/vong-2.svg')",
+        "round-3-background": "url('/vong-3.svg')",
+        "round-4-background": "url('/vong-4.svg')",
+        "round-5-background": "url('/vong-5.svg')",
       },
       fontFamily: {
         "pf-beau": ["PF Beau Sans Pro", "sans-serif"],

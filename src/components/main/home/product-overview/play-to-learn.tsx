@@ -8,7 +8,7 @@ type PlayToLearnProps = {
 const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
   return (
     <motion.div
-      className="w-full h-[1080px] flex items-center justify-center gap-x-52 mt-60 bg-play-and-learn-background bg-no-repeat bg-contain"
+      className="w-full h-[670px] xl:h-[760px] 2xl:h-[1080px] flex items-center justify-center gap-x-14 xl:gap-x-24 2xl:gap-x-52 mt-60 bg-play-and-learn-background bg-no-repeat bg-contain"
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{
@@ -47,7 +47,9 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
             typingDelay={500}
             eraseSpeed={0}
             displayTextRenderer={(text) => (
-              <span className="text-[36px] font-semibold">{text}</span>
+              <span className="text-[24px] xl:text-[28px]  2xl:text-[36px] font-semibold">
+                {text}
+              </span>
             )}
           />
         </motion.h1>
@@ -89,7 +91,7 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
                 />
               </motion.div>
               <motion.span
-                className="text-[34px] font-normal"
+                className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal"
                 initial={{ opacity: 0, x: 30 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{
@@ -107,11 +109,9 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
 
       <div className="rounded-xl overflow-hidden">
         <motion.img
-          className="rounded-xl"
+          className="rounded-xl overflow-hidden 2xl:w-[665px] 2xl:h-[480px] xl:w-max w-[500px] xl:h-[431px] h-[360px]"
           src="/playtolearn-1.svg"
           loading="lazy"
-          width={680}
-          height={600}
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}
           transition={{

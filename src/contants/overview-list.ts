@@ -127,7 +127,7 @@ const whyUsListFeatures: Record<
         icon: "/gif/gif-4.gif",
         title: "Tối ưu thời gian",
         description:
-          "Giảm thời gian thống kê, báo cáo, phân tích.Giảm thời gian tổ chức kiểm tra, đánh giá.Thuận tiện kết nối trực tiếp, kịp thời với phụ huynh.",
+          "Giảm thời gian thống kê, báo cáo, phân tích. Giảm thời gian tổ chức kiểm tra, đánh giá. Thuận tiện kết nối trực tiếp, kịp thời với phụ huynh.",
       },
     ],
   },

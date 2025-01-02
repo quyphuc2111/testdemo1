@@ -6,12 +6,12 @@ import styled from "styled-components";
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
+    breakpoint: { max: 4000, min: 1500 },
     items: 4,
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
+    breakpoint: { max: 1500, min: 1024 },
+    items: 3,
   },
   tablet: {
     breakpoint: { max: 1024, min: 464 },
@@ -64,14 +64,28 @@ const carouselItems: Array<{
 const repeatedCarouselItems = new Array(10).fill(carouselItems).flat();
 
 const CarouselCustom = styled(Carousel)`
-  .react-multiple-carousel__arrow.react-multiple-carousel__arrow--right {
-    transform: translateX(52px) !important;
-    border: 3px solid #ffffff;
+  @media only screen and (min-width: 1500px) {
+    .react-multiple-carousel__arrow.react-multiple-carousel__arrow--right {
+      transform: translateX(52px) !important;
+      border: 3px solid #ffffff;
+    }
+    .react-multiple-carousel__arrow.react-multiple-carousel__arrow--left {
+      transform: translateX(-40px) !important;
+      border: 3px solid #ffffff;
+    }
   }
-  .react-multiple-carousel__arrow.react-multiple-carousel__arrow--left {
-    transform: translateX(-40px) !important;
-    border: 3px solid #ffffff;
+
+  @media only screen and (min-width: 1024px) and (max-width: 1500px) {
+    .react-multiple-carousel__arrow.react-multiple-carousel__arrow--right {
+      transform: translateX(40px) !important;
+      border: 3px solid #ffffff;
+    }
+    .react-multiple-carousel__arrow.react-multiple-carousel__arrow--left {
+      transform: translateX(-38px) !important;
+      border: 3px solid #ffffff;
+    }
   }
+
   .react-multiple-carousel__arrow::before {
     font-size: 14px;
   }
@@ -107,11 +121,9 @@ const CarouselFeatures = () => {
         />
 
         <CarouselCustom
-          swipeable={true}
-          draggable={true}
           responsive={responsive}
           infinite={true}
-          className="w-[1380px] px-10"
+          className="w-[1000px] 2xl:w-[1380px] px-7 2xl:px-10"
           itemClass="w-max"
         >
           {repeatedCarouselItems.map((item, index) => {
@@ -134,8 +146,7 @@ const CarouselFeatures = () => {
                   src={item.image}
                   width={150}
                   height={150}
-                  className="transition-all duration-300 transform hover:scale-110"
-                  whileHover={{ scale: 1.1 }}
+                  className="transition-all duration-300 transform "
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.5 }}

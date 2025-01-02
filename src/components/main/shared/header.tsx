@@ -36,12 +36,12 @@ const navList: NavListType[] = [
 const Header = () => {
   return (
     <header className="absolute top-14 left-0 right-0 z-50 h-[80px] bg-transparent">
-      <nav className="w-full px-28 flex justify-between items-center">
+      <nav className="w-full px-8 xl:px-10 2xl:px-28 flex justify-between items-center">
         {/* logos */}
         <section>
           <motion.img
             src="/logo-2xl.png"
-            className="w-[140px] h-[62px]"
+            className="w-[120px] h-[52px]  xl:w-[140px] xl:h-[62px]"
             initial={{ x: -100, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{
@@ -52,14 +52,15 @@ const Header = () => {
         </section>
 
         {/* nav list */}
-        <section className="flex items-center gap-x-16">
-          <ul className="w-full flex items-center gap-x-20">
+        <section className="flex items-center gap-x-12 xl:gap-x-12 2xl:gap-x-16">
+          <ul className="w-full flex items-center gap-x-12 xl:gap-x-14 2xl:gap-x-20">
             {navList.slice(0, -1).map((navItem, index) => (
               <motion.li
                 key={index}
                 className="hover:cursor-pointer"
                 initial={{ y: 100, opacity: 0 }} // Bắt đầu ngoài màn hình và mờ dần
                 whileInView={{ y: 0, opacity: 1 }} // Di chuyển vào và làm rõ
+                exit={{ y: -100, opacity: 0 }}
                 transition={{
                   duration: 0.5,
                   delay: (navList.length - 2 - index) * 0.1, // Độ trễ tăng dần từ cuối lên đầu
@@ -67,8 +68,8 @@ const Header = () => {
               >
                 <Link
                   to={navItem.link}
-                  target={navItem.link === "/" ? "_self" : "_blank"}
-                  className="text-[24px] font-normal"
+                  target={navItem.link.startsWith("http") ? "_blank" : "_self"}
+                  className="text-[18px] 2xl:text-[24px] font-normal"
                 >
                   {navItem.title}
                 </Link>
@@ -79,14 +80,14 @@ const Header = () => {
           {/* Đăng nhập button */}
           <ul>
             <motion.li
-              initial={{ y: 100, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
+              initial={{ x: 100, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
               transition={{
                 duration: 0.5,
                 delay: 0,
               }}
             >
-              <button className="w-[220px] h-[62px] rounded-[48px] border-[1px] border-[#FFA726] font-normal text-[24px] text-[#FFA726] bg-white ">
+              <button className="w-[140px] h-[42px] xl:w-[180px] xl:h-[52px] text-[18px] 2xl:text-[24px]  2xl:w-[220px] 2xl:h-[62px] rounded-[48px] border-[1px] border-[#FFA726] font-normal  text-[#FFA726] bg-white ">
                 {navList[navList.length - 1].title}
               </button>
             </motion.li>

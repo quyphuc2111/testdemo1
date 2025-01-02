@@ -103,7 +103,7 @@ const WhyUsOverview: React.FC<WhyUsOverviewProps> = (props) => {
             duration: 0.7,
             ease: [0.25, 0.1, 0.25, 1],
           }}
-          className="flex items-center justify-between gap-x-24 px-32 "
+          className="flex items-center justify-between gap-x-24 px-10 xl:px-20 2xl:px-32 "
         >
           <motion.div
             initial="hidden"
@@ -125,8 +125,10 @@ const WhyUsOverview: React.FC<WhyUsOverviewProps> = (props) => {
                     width={50}
                     height={50}
                   />
-                  <h1 className="font-semibold text-[32px]">{content.title}</h1>
-                  <p className="font-normal text-[24px] text-justify">
+                  <h1 className="font-semibold text-[20px] 2xl:text-[32px]">
+                    {content.title}
+                  </h1>
+                  <p className="font-normal text-[20px] 2xl:text-[24px] text-justify">
                     {content.description}
                   </p>
                 </motion.div>
@@ -143,7 +145,7 @@ const WhyUsOverview: React.FC<WhyUsOverviewProps> = (props) => {
               ease: [0.25, 0.1, 0.25, 1],
               delay: 0.3,
             }}
-            className="w-[300px] h-[280px] bg-why-me-radial-gradient rounded-full flex justify-center items-center"
+            className="xl:w-[260px] xl:h-[240px] 2xl:w-[300px] 2xl:h-[280px] bg-why-me-radial-gradient rounded-full flex justify-center items-center"
           >
             <img
               loading="lazy"

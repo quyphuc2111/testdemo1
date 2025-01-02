@@ -6,14 +6,12 @@ type BKTForumOverviewProps = {
 
 const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
   return (
-    <motion.div className="w-max h-max flex items-center gap-x-64 mt-56">
+    <motion.div className="w-max h-max flex items-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 mt-56">
       <div className="rounded-xl overflow-hidden">
         <motion.img
-          className="rounded-xl"
+          className="rounded-xl 2xl:w-[700px] 2xl:h-[490px] w-max h-[431px]"
           src="/forum-1.svg"
           loading="lazy"
-          width={700}
-          height={531}
           initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
           whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position
           transition={{
@@ -26,7 +24,7 @@ const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
 
       <section>
         <motion.h1
-          className="font-semibold text-[36px]"
+          className="font-semibold text-[24px] xl:text-[28px]  2xl:text-[36px]"
           initial={{ opacity: 0, y: 50 }} // Start with opacity 0 and slightly below
           whileInView={{ opacity: 1, y: 0 }} // Fade in and slide up to position
           transition={{ duration: 0.8, delay: 0.2 }} // Smooth transition with slight delay
@@ -56,7 +54,9 @@ const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
               }}
             >
               <img src="/gif/gif-12.gif" width={50} height={50} />
-              <span className="text-[34px] font-normal">{feature.title}</span>
+              <span className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
+                {feature.title}
+              </span>
             </motion.li>
           ))}
         </motion.ul>
