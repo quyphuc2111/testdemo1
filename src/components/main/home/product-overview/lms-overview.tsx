@@ -47,7 +47,7 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
         </motion.ul>
       </section>
 
-      <div className="rounded-xl w-max h-max shadow-lg">
+      <div className="rounded-xl w-max h-max shadow-lg bg-transparent">
         <motion.img
           src="/lms.jpg"
           className="object-fill rounded-xl w-[533px]  h-[250px] 2xl:w-[852px] 2xl:h-[400px] border-2 border-amber-200"
