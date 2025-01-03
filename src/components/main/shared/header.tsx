@@ -35,7 +35,7 @@ const navList: NavListType[] = [
 
 const Header = () => {
   const handleLogin = (link: string) => {
-    window.open("https://forum.bkt.net.vn/", "_blank");
+    window.open(link, "_blank");
   };
   return (
     <header className="absolute top-14 left-0 right-0 z-50 h-[80px] bg-transparent">
