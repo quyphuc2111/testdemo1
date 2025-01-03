@@ -20,19 +20,19 @@ const lmsListFeatures: Array<{ title: string }> = [
 ];
 const forumListFeatures: Array<{ title: string }> = [
   {
-    title: "Dạy học trực tuyến",
+    title: "Xem và tải học liệu trực tuyến",
   },
   {
-    title: "Tổ chức thi trực tuyến",
+    title: "Chia sẻ học liệu trực tuyến",
   },
   {
-    title: "Quản lý học sinh",
+    title: "Thảo luận trực tuyến",
   },
   {
-    title: "Quản lý kết quả",
+    title: "Trung tâm các hệ thống giáo dục",
   },
   {
-    title: "Giao bài tập về nhà cho học sinh",
+    title: "Học và trao đổi kiến thức trực tuyến",
   },
 ];
 
@@ -56,22 +56,18 @@ const playToLearnListFeatures: Array<{ title: string }> = [
 
 const stemListFeatures: Array<{ title: string }> = [
   {
-    title: "Lập trình",
+    title: "Lập trình trực tuyến",
   },
 
   {
-    title: "Vẽ mạch điện",
+    title: "Mô phỏng 3D nguyên tử của Rutherford-Bohr",
   },
 
   {
-    title: "Vẽ mạch điện",
-  },
-
-  {
-    title: "Vẽ mạch điện",
+    title: "Mô phỏng 3D đường sức từ của nam châm",
   },
   {
-    title: "Vẽ mạch điện",
+    title: "Mô phỏng mạch điện",
   },
 ];
 

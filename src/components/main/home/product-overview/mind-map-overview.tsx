@@ -8,7 +8,7 @@ const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
   return (
     <div className="w-full h-[630px] xl:h-[720px] 2xl:h-[1080px] flex items-center justify-center bg-mindmap-background bg-no-repeat bg-contain">
       <motion.div
-        className="w-full h-full flex items-center justify-center gap-x-14 xl:gap-x-24 2xl:gap-x-64"
+        className="w-full h-full flex justify-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 xl:mt-40"
         initial={{ opacity: 0 }} // Ban đầu ẩn
         whileInView={{ opacity: 1 }} // Khi vào viewport sẽ xuất hiện
         transition={{ duration: 1, ease: "easeInOut" }} // Thời gian và easing

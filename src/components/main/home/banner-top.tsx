@@ -30,7 +30,7 @@ const BannerTop = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="text-justify w-[450px] 2xl:w-[650px] text-[18px] xl:text-[20px] 2xl:text-[24px] text-[#004C70]"
+          className="text-justify w-[430px] 2xl:w-[650px] text-[18px] xl:text-[20px] 2xl:text-[24px] text-[#004C70]"
         >
           Được xây dựng và phát triển bởi công ty Cổ Phần Đầu tư Thương Mại và
           công nghệ BKT. Nguồn học liệu số và các chức năng tiện ích trên

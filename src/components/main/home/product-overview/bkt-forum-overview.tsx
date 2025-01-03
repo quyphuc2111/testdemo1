@@ -6,11 +6,11 @@ type BKTForumOverviewProps = {
 
 const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
   return (
-    <motion.div className="w-max h-max flex items-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 mt-56">
+    <motion.div className="w-max h-max flex items-center gap-x-8 xl:gap-x-10 2xl:gap-x-24">
       <div className="rounded-xl overflow-hidden">
         <motion.img
-          className="rounded-xl 2xl:w-[700px] 2xl:h-[490px] w-max h-[431px]"
-          src="/forum-1.svg"
+          className="rounded-xl w-[549px] h-[300px] 2xl:w-[896px] 2xl:h-[490px] "
+          src="/forum.jpg"
           loading="lazy"
           initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
           whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position

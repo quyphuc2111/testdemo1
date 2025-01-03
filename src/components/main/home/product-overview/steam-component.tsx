@@ -8,7 +8,8 @@ type steamComponentProps = {
 const StemOverview: React.FC<steamComponentProps> = (props) => {
   return (
     <motion.div
-      className="w-full h-[630px] xl:h-[720px] 2xl:h-[1080px] flex items-center justify-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 bg-stem-background bg-no-repeat bg-contain"
+      className="w-full h-[630px] xl:h-[720px] 2xl:h-[1080px] flex items-center justify-center 
+                gap-x-14 xl:gap-x-24 2xl:gap-x-32 bg-stem-background bg-no-repeat bg-contain"
       initial={{ opacity: 0 }} // Initial opacity set to 0
       whileInView={{ opacity: 1 }} // Appear when in the viewport
       transition={{ duration: 1, ease: "easeInOut" }} // Apply the same duration and easing as the "Mindmap" section

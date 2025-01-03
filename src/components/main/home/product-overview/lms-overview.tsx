@@ -6,7 +6,7 @@ type LMSOverviewProps = {
 
 const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
   return (
-    <motion.div className="w-max flex items-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 mt-48">
+    <motion.div className="w-max flex items-center gap-x-0 xl:gap-x-14 2xl:gap-x-24 mt-48">
       <section>
         <motion.h1
           className="font-semibold text-[24px] xl:text-[28px]  2xl:text-[36px]"
@@ -47,10 +47,10 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
         </motion.ul>
       </section>
 
-      <div className="rounded-xl overflow-hidden w-max h-max">
+      <div className="rounded-xl w-max h-max shadow-lg">
         <motion.img
-          src="/lms-1.svg"
-          className="rounded-xl overflow-hidden 2xl:w-[700px] 2xl:h-[531px] w-max h-[431px]"
+          src="/lms.jpg"
+          className="object-fill rounded-xl w-[533px]  h-[250px] 2xl:w-[852px] 2xl:h-[400px] border-2 border-amber-200"
           loading="lazy"
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}

@@ -16,7 +16,7 @@ import LMSOverview from "./product-overview/lms-overview";
 const ProductionOverviewWrapper = () => {
   return (
     <>
-      <div className="w-full h-max bg-lms-background bg-no-repeat bg-contain flex flex-col gap-y-96 items-center">
+      <div className="w-full h-max bg-lms-background bg-no-repeat bg-center bg-contain flex flex-col gap-y-72 items-center">
         {/* LMS - 1 */}
         <LMSOverview lmsListFeatures={lmsListFeatures} />
         {/* BKT Forum */}

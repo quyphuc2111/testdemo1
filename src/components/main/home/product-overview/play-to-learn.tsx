@@ -42,7 +42,7 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
           }}
         >
           <TypingEffect
-            text="Learn to game"
+            text="Play to learn"
             speed={100}
             typingDelay={500}
             eraseSpeed={0}
@@ -110,7 +110,7 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
       <div className="rounded-xl overflow-hidden">
         <motion.img
           className="rounded-xl overflow-hidden 2xl:w-[665px] 2xl:h-[480px] xl:w-max w-[500px] xl:h-[431px] h-[360px]"
-          src="/playtolearn-1.svg"
+          src="/playtolearn.jpg"
           loading="lazy"
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}

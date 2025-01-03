@@ -17,23 +17,26 @@ const navList: NavListType[] = [
   },
   {
     title: "Diễn đàn",
-    link: "https://forum.bkt.net.vn/apps/dashboard/",
+    link: "https://forum.bkt.net.vn/",
   },
-  {
-    title: "Chơi mà học",
-    link: "http://playtolearn.bksgroup.vn/",
-  },
-  {
-    title: "Bản đồ tư duy",
-    link: "https://mindmap.bkt.net.vn/#/",
-  },
+  // {
+  //   title: "Chơi mà học",
+  //   link: "http://playtolearn.bksgroup.vn/",
+  // },
+  // {
+  //   title: "Bản đồ tư duy",
+  //   link: "https://mindmap.bkt.net.vn/#/",
+  // },
   {
     title: "Đăng nhập",
-    link: "/",
+    link: "https://forum.bkt.net.vn/",
   },
 ];
 
 const Header = () => {
+  const handleLogin = (link: string) => {
+    window.open("https://forum.bkt.net.vn/", "_blank");
+  };
   return (
     <header className="absolute top-14 left-0 right-0 z-50 h-[80px] bg-transparent">
       <nav className="w-full px-8 xl:px-10 2xl:px-28 flex justify-between items-center">
@@ -87,7 +90,10 @@ const Header = () => {
                 delay: 0,
               }}
             >
-              <button className="w-[140px] h-[42px] xl:w-[180px] xl:h-[52px] text-[18px] 2xl:text-[24px]  2xl:w-[220px] 2xl:h-[62px] rounded-[48px] border-[1px] border-[#FFA726] font-normal  text-[#FFA726] bg-white ">
+              <button
+                onClick={() => handleLogin(navList[navList.length - 1].link)}
+                className="w-[140px] h-[42px] xl:w-[180px] xl:h-[52px] text-[18px] 2xl:text-[24px]  2xl:w-[220px] 2xl:h-[62px] rounded-[48px] border-[1px] border-[#FFA726] font-normal  text-[#FFA726] bg-white "
+              >
                 {navList[navList.length - 1].title}
               </button>
             </motion.li>
