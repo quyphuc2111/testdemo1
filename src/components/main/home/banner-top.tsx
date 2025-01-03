@@ -4,7 +4,7 @@ import BannerTopContentRight from "./banner-top-content-right";
 
 const BannerTop = () => {
   return (
-    <div className="w-full h-[1075px] relative bg-cover bg-no-repeat bg-banner-top-background overflow-x-hidden">
+    <div className="w-full h-[1075px] relative bg-cover bg-no-repeat bg-banner-top-background">
       {/* Title */}
       <section className="flex flex-col gap-y-14 w-[550px] absolute left-[5%] 2xl:left-[15%] top-1/2 -translate-y-1/2 ">
         <motion.h1
