@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import TypingEffect from "@/components/typing-effect";
+import TypingEffect from "@/components/animations/typing-effect";
 
 type PlayToLearnProps = {
   playToLearnListFeatures: Array<{ title: string }>;
