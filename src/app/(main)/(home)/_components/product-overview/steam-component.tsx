@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 import TypingEffect from "@/components/animations/typing-effect";
 
 type steamComponentProps = {
@@ -18,17 +19,23 @@ const StemOverview: React.FC<steamComponentProps> = (props) => {
       transition={{ duration: 1, ease: "easeInOut" }} // Apply the same duration and easing as the "Mindmap" section
     >
       <div className="rounded-xl overflow-hidden">
-        <motion.img
+        <motion.div
           className="rounded-xl 2xl:w-[680px] 2xl:h-[516px] xl:w-max w-[470px] xl:h-[431px] h-[360px]"
-          src="/images/stem-1.svg"
-          loading="lazy"
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}
           transition={{
             duration: 0.7,
             ease: "easeOut",
           }}
-        />
+        >
+          <Image
+            src="/images/stem-1.svg"
+            alt="STEM"
+            width={680}
+            height={516}
+            className="rounded-xl w-full h-full object-cover"
+          />
+        </motion.div>
       </div>
 
       <section className=" 2xl:-translate-y-12">
@@ -67,7 +74,7 @@ const StemOverview: React.FC<steamComponentProps> = (props) => {
                 ease: [0.25, 0.1, 0.25, 1], // Apply similar easing for consistency
               }}
             >
-              <img src="/images/gif/gif-12.gif" width={50} height={50} />
+              <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
               <motion.span
                 className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal"
                 initial={{ opacity: 0, x: 30 }}

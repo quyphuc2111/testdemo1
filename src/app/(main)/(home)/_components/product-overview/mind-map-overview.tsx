@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
 
 type MindMapOverviewProps = {
   mindMapFeatures: Array<{ title: string }>;
@@ -46,7 +47,7 @@ const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
               >
-                <img src="/images/gif/gif-12.gif" width={50} height={50} />
+                <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
                 <span className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
                   {feature.title}
                 </span>
@@ -57,10 +58,8 @@ const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
 
         <AnimatePresence>
           <div className="rounded-xl overflow-hidden">
-            <motion.img
+            <motion.div
               className="rounded-xl 2xl:w-[680px] 2xl:h-[350px] xl:w-[600px] w-[500px] xl:h-[310px] h-[260px]"
-              src="/images/mindmap-1.svg"
-              loading="lazy"
               initial={{ opacity: 0, x: 100 }}
               whileInView={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
@@ -69,7 +68,15 @@ const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
                 ease: "easeOut",
                 delay: 0.5,
               }}
-            />
+            >
+              <Image
+                src="/images/mindmap-1.svg"
+                alt="Mindmap"
+                width={680}
+                height={350}
+                className="rounded-xl w-full h-full object-cover"
+              />
+            </motion.div>
           </div>
         </AnimatePresence>
       </motion.div>

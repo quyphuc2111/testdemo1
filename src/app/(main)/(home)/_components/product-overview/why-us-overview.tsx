@@ -2,6 +2,7 @@
 
 
 import { motion } from "motion/react";
+import Image from "next/image";
 import { useState } from "react";
 
 type WhyUsOverviewProps = {
@@ -120,12 +121,12 @@ const WhyUsOverview: React.FC<WhyUsOverviewProps> = (props) => {
                   variants={childVariants}
                   className="flex flex-col gap-y-2"
                 >
-                  <img
-                    loading="lazy"
+                  <Image
                     src={content.icon}
                     alt={content.title}
                     width={50}
                     height={50}
+                    unoptimized
                   />
                   <h1 className="font-semibold text-[20px] 2xl:text-[32px]">
                     {content.title}
@@ -147,14 +148,13 @@ const WhyUsOverview: React.FC<WhyUsOverviewProps> = (props) => {
               ease: [0.25, 0.1, 0.25, 1],
               delay: 0.3,
             }}
-          className="xl:w-[260px] xl:h-[240px] 2xl:w-[300px] 2xl:h-[280px] rounded-full flex justify-center items-center"
-          style={{
-            backgroundImage:
-              "radial-gradient(100% 100% at 100% 50%, #d4ebd9 0%, #aad8b2 36.55%, #8dcb98 79.33%, #7fc48c 100%)",
-          }}
+            className="xl:w-[260px] xl:h-[240px] 2xl:w-[300px] 2xl:h-[280px] rounded-full flex justify-center items-center"
+            style={{
+              backgroundImage:
+                "radial-gradient(100% 100% at 100% 50%, #d4ebd9 0%, #aad8b2 36.55%, #8dcb98 79.33%, #7fc48c 100%)",
+            }}
           >
-            <img
-              loading="lazy"
+            <Image
               src={props.whyUsListFeatures[activeTab].image}
               alt={`${activeTab} image`}
               width={256}

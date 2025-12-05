@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 
 type BKTForumOverviewProps = {
   forumListFeatures: Array<{ title: string }>;
@@ -10,10 +11,8 @@ const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
   return (
     <motion.div className="w-max h-max flex items-center gap-x-8 xl:gap-x-10 2xl:gap-x-24">
       <div className="rounded-xl overflow-hidden">
-        <motion.img
+        <motion.div
           className="rounded-xl w-[549px] h-[300px] 2xl:w-[896px] 2xl:h-[490px] "
-          src="/images/forum.jpg"
-          loading="lazy"
           initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
           whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position
           transition={{
@@ -21,7 +20,15 @@ const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
             delay: 0.5, // Delay to sync with the list items
             ease: "easeOut", // Smooth easing
           }}
-        />
+        >
+          <Image
+            src="/images/forum.jpg"
+            alt="BKT Forum"
+            width={896}
+            height={490}
+            className="rounded-xl w-full h-full object-cover"
+          />
+        </motion.div>
       </div>
 
       <section>
@@ -55,7 +62,7 @@ const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
                 ease: [0.25, 0.1, 0.25, 1], // Easing for a smooth effect
               }}
             >
-              <img src="/images/gif/gif-12.gif" width={50} height={50} />
+              <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
               <span className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
                 {feature.title}
               </span>

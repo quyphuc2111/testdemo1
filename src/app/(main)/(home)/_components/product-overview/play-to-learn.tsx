@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 import TypingEffect from "@/components/animations/typing-effect";
 
 type PlayToLearnProps = {
@@ -81,11 +82,12 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
                   ease: "easeInOut",
                 }}
               >
-                <motion.img
+                <Image
                   src="/images/gif/gif-12.gif"
                   width={50}
                   height={50}
                   alt="feature-icon"
+                  unoptimized
                 />
               </motion.div>
               <motion.span
@@ -106,17 +108,23 @@ const PlayToLearn: React.FC<PlayToLearnProps> = (props) => {
       </motion.section>
 
       <div className="rounded-xl overflow-hidden">
-        <motion.img
+        <motion.div
           className="rounded-xl overflow-hidden 2xl:w-[665px] 2xl:h-[480px] xl:w-max w-[500px] xl:h-[431px] h-[360px]"
-          src="/images/playtolearn.jpg"
-          loading="lazy"
           initial={{ opacity: 0, scale: 0.8, x: 50 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}
           transition={{
             duration: 0.7,
             ease: "easeOut",
           }}
-        />
+        >
+          <Image
+            src="/images/playtolearn.jpg"
+            alt="Play to learn"
+            width={665}
+            height={480}
+            className="rounded-xl w-full h-full object-cover"
+          />
+        </motion.div>
       </div>
     </motion.div>
   );

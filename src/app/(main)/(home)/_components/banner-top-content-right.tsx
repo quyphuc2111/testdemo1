@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import Image from "next/image";
 
 const BannerTopContentRight = () => {
   return (
@@ -43,20 +44,13 @@ const BannerTopContentRight = () => {
               transform: `translate(-50%, -380px)`,
             }}
           >
-            <picture>
-              <source
-                srcSet="/images/gif/gif-13.webp"
-                type="image/webp"
-                className="rounded-full"
-              />
-              <img
-                src="/images/gif/gif-13.gif"
-                alt="gif-13"
-                width={73}
-                height={84}
-                className="rounded-full"
-              />
-            </picture>
+            <Image
+              src="/images/gif/gif-13.gif"
+              alt="gif-13"
+              width={73}
+              height={84}
+              className="rounded-full"
+            />
           </div>
 
           {/* Image 2 */}
@@ -68,20 +62,13 @@ const BannerTopContentRight = () => {
               transform: `translate(-300px, -50%)`, // Điều chỉnh khoảng cách từ tâm (300px)
             }}
           >
-            <picture>
-              <source
-                srcSet="/images/gif/gif-14.webp"
-                type="image/webp"
-                className="rounded-full"
-              />
-              <img
-                src="/images/gif/gif-14.gif"
-                alt="gif-14"
-                width={73}
-                height={84}
-                className="rounded-full"
-              />
-            </picture>
+            <Image
+              src="/images/gif/gif-14.gif"
+              alt="gif-14"
+              width={73}
+              height={84}
+              className="rounded-full"
+            />
           </div>
 
           {/* Image 3 */}
@@ -93,20 +80,13 @@ const BannerTopContentRight = () => {
               transform: `translate(-50%, 350px)`, // Điều chỉnh khoảng cách từ tâm (300px)
             }}
           >
-            <picture>
-              <source
-                srcSet="/images/gif/gif-15.webp"
-                type="image/webp"
-                className="rounded-full"
-              />
-              <img
-                src="/images/gif/gif-15.gif"
-                alt="gif-15"
-                width={73}
-                height={84}
-                className="rounded-full"
-              />
-            </picture>
+            <Image
+              src="/images/gif/gif-15.gif"
+              alt="gif-15"
+              width={73}
+              height={84}
+              className="rounded-full"
+            />
           </div>
         </motion.div>
 
@@ -149,20 +129,13 @@ const BannerTopContentRight = () => {
                 transform: `translate(-50%, 350px)`, // Điều chỉnh khoảng cách từ tâm (300px)
               }}
             >
-              <picture>
-                <source
-                  srcSet="/images/gif/gif-16.webp"
-                  type="image/webp"
-                  className="rounded-full"
-                />
-                <img
-                  src="/images/gif/gif-16.gif"
-                  alt="gif-16"
-                  width={73}
-                  height={84}
-                  className="rounded-full"
-                />
-              </picture>
+              <Image
+                src="/images/gif/gif-16.gif"
+                alt="gif-16"
+                width={73}
+                height={84}
+                className="rounded-full"
+              />
             </div>
           </motion.div>
 
@@ -206,20 +179,13 @@ const BannerTopContentRight = () => {
                   transform: `translate(-50%, -380px)`,
                 }}
               >
-                <picture>
-                  <source
-                    srcSet="/images/gif/gif-17.webp"
-                    type="image/webp"
-                    className="rounded-full"
-                  />
-                  <img
-                    src="/images/gif/gif-17.gif"
-                    alt="gif-17"
-                    width={73}
-                    height={84}
-                    className="rounded-full"
-                  />
-                </picture>
+                <Image
+                  src="/images/gif/gif-17.gif"
+                  alt="gif-17"
+                  width={73}
+                  height={84}
+                  className="rounded-full"
+                />
               </div>
 
               {/* Image 2 */}
@@ -231,20 +197,13 @@ const BannerTopContentRight = () => {
                   transform: `translate(-300px, -50%)`,
                 }}
               >
-                <picture>
-                  <source
-                    srcSet="/images/gif/gif-18.webp"
-                    type="image/webp"
-                    className="rounded-full"
-                  />
-                  <img
-                    src="/images/gif/gif-18.gif"
-                    alt="gif-18"
-                    width={100}
-                    height={120}
-                    className="rounded-full"
-                  />
-                </picture>
+                <Image
+                  src="/images/gif/gif-18.gif"
+                  alt="gif-18"
+                  width={100}
+                  height={120}
+                  className="rounded-full"
+                />
               </div>
 
               {/* Image 3 */}
@@ -256,21 +215,13 @@ const BannerTopContentRight = () => {
                   transform: `translate(-50%, 350px)`,
                 }}
               >
-                <picture>
-                  <source
-                    srcSet="/images/gif/gif-19.webp"
-                    type="image/webp"
-                    className="rounded-full"
-                  />
-
-                  <img
-                    src="/images/gif/gif-19.gif"
-                    alt="gif-19"
-                    width={73}
-                    height={84}
-                    className="rounded-full"
-                  />
-                </picture>
+                <Image
+                  src="/images/gif/gif-19.gif"
+                  alt="gif-19"
+                  width={73}
+                  height={84}
+                  className="rounded-full"
+                />
               </div>
             </motion.div>
 

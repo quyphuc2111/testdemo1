@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navList } from "@/contants/header-nav-list";
@@ -38,8 +39,7 @@ const HeaderGlobalComponent = () => {
             <nav className="w-full px-8 xl:px-10 2xl:px-28 h-full flex justify-between items-center">
                 {/* logos */}
                 <section>
-                    <motion.img
-                        src="/images/logo-2xl.png"
+                    <motion.div
                         className="w-[120px] h-[52px]  xl:w-[140px] xl:h-[62px]"
                         initial={{ x: -100, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
@@ -47,7 +47,15 @@ const HeaderGlobalComponent = () => {
                             duration: 0.5,
                             delay: 0.2,
                         }}
-                    />
+                    >
+                        <Image
+                            src="/images/logo-2xl.png"
+                            alt="Logo"
+                            width={140}
+                            height={62}
+                            className="w-full h-full object-contain"
+                        />
+                    </motion.div>
                 </section>
 
                 {/* nav list */}

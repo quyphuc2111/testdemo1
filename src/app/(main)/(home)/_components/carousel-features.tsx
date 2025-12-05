@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
 
 const carouselItems: Array<{
@@ -91,20 +92,32 @@ const CarouselFeatures = () => {
 
       {/* carousel */}
       <div className="relative w-max h-max mt-11">
-        <motion.img
-          src="/images/xanh-icon-1.svg"
+        <motion.div
           className="absolute -top-5 -left-16 transform -translate-y-1/2"
           initial={{ x: -100, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-        />
-        <motion.img
-          src="/images/xanh-icon-2.svg"
+        >
+          <Image
+            src="/images/xanh-icon-1.svg"
+            alt="icon"
+            width={100}
+            height={100}
+          />
+        </motion.div>
+        <motion.div
           className="absolute -bottom-20 -right-10 transform"
           initial={{ x: 100, opacity: 0 }}
           whileInView={{ x: 0, opacity: 1 }}
           transition={{ duration: 1 }}
-        />
+        >
+          <Image
+            src="/images/xanh-icon-2.svg"
+            alt="icon"
+            width={100}
+            height={100}
+          />
+        </motion.div>
 
         <div className="w-full max-w-[1380px] px-7 2xl:px-10">
           <div className="overflow-hidden" ref={emblaRef}>
@@ -125,15 +138,19 @@ const CarouselFeatures = () => {
                       duration: 0.5,
                     }}
                   >
-                    <motion.img
-                      src={item.image}
-                      width={150}
-                      height={150}
+                    <motion.div
                       className="transition-all duration-300 transform"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.5 }}
-                    />
+                    >
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        width={150}
+                        height={150}
+                      />
+                    </motion.div>
                     <motion.p
                       className="text-center text-[24px] font-normal"
                       initial={{ opacity: 0 }}

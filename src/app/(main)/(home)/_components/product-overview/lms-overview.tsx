@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
+import Image from "next/image";
 
 type LMSOverviewProps = {
   lmsListFeatures: Array<{ title: string }>;
@@ -40,7 +41,7 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
-              <img src="/images/gif/gif-12.gif" width={50} height={50} />
+              <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
               <p className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
                 {feature.title}
               </p>
@@ -50,10 +51,8 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
       </section>
 
       <div className="rounded-xl w-max h-max shadow-lg bg-transparent">
-        <motion.img
-          src="/images/lms.jpg"
+        <motion.div
           className="object-fill rounded-xl w-[533px]  h-[250px] 2xl:w-[852px] 2xl:h-[400px] border-2 border-amber-200"
-          loading="lazy"
           initial={{ opacity: 0, x: 100 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{
@@ -61,7 +60,15 @@ const LMSOverview: React.FC<LMSOverviewProps> = (props) => {
             delay: 0.5,
             ease: "easeOut",
           }}
-        />
+        >
+          <Image
+            src="/images/lms.jpg"
+            alt="LMS"
+            width={852}
+            height={400}
+            className="object-fill rounded-xl w-full h-full"
+          />
+        </motion.div>
       </div>
     </motion.div>
   );
