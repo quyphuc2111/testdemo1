@@ -69,7 +69,7 @@ const DigitalLecturesPage = () => {
             {/* Main Content */}
             <div className="max-w-[1440px] mx-auto px-4 xl:px-8 2xl:px-12 py-12 relative z-10">
                 <div className="mb-8">
-                    <h2 className="text-[28px] xl:text-[32px] 2xl:text-[36px] font-semibold text-[#004C70] mb-2">
+                    <h2 className="text-[24px] md:text-[28px] xl:text-[32px] 2xl:text-[36px] font-semibold text-[#004C70] mb-2">
                         Danh sách lớp học
                     </h2>
                     <p className="text-[16px] text-gray-600">
@@ -79,34 +79,34 @@ const DigitalLecturesPage = () => {
 
                 {/* Tiểu học Section */}
                 <div className="mb-12">
-                    <div className="mb-8 bg-[#FEF3F8] border-3 border-[#FBCFE8] p-6 rounded-3xl relative overflow-hidden">
+                    <div className="mb-8 bg-[#FEF3F8] border-3 border-[#FBCFE8] p-4 md:p-6 rounded-3xl relative overflow-hidden">
                         <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className="bg-white p-3 rounded-full border-3 border-[#FBCFE8]">
-                                    <School size={32} className="text-[#EC4899]" />
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="bg-white p-2 md:p-3 rounded-full border-3 border-[#FBCFE8] shrink-0">
+                                    <School className="text-[#EC4899] w-6 h-6 md:w-8 md:h-8" />
                                 </div>
                                 <div>
-                                    <h3 className="text-[24px] xl:text-[28px] 2xl:text-[32px] font-black text-[#EC4899] mb-1" style={{ letterSpacing: '-0.5px' }}>
+                                    <h3 className="text-[20px] md:text-[24px] xl:text-[28px] 2xl:text-[32px] font-black text-[#EC4899] mb-1" style={{ letterSpacing: '-0.5px' }}>
                                         Tiểu học
                                     </h3>
-                                    <p className="text-[14px] text-[#EC4899]/70 font-medium">
+                                    <p className="text-[12px] md:text-[14px] text-[#EC4899]/70 font-medium">
                                         Cấp học đầu tiên trong hệ thống giáo dục
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                <div className="bg-white rounded-full px-5 py-3 border-3 border-[#FBCFE8]">
-                                    <div className="text-[28px] xl:text-[32px] 2xl:text-[36px] font-black text-[#EC4899] leading-none text-center">
+                                <div className="bg-white rounded-full px-4 py-2 md:px-5 md:py-3 border-3 border-[#FBCFE8]">
+                                    <div className="text-[20px] md:text-[28px] xl:text-[32px] 2xl:text-[36px] font-black text-[#EC4899] leading-none text-center">
                                         {tieuHocClasses.length}
                                     </div>
-                                    <div className="text-[12px] text-[#EC4899]/70 font-semibold mt-1 text-center">
+                                    <div className="text-[10px] md:text-[12px] text-[#EC4899]/70 font-semibold mt-0.5 md:mt-1 text-center">
                                         lớp học
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {tieuHocClasses.map((classItem, index) => (
                             <Link
                                 key={classItem.id}
@@ -116,7 +116,7 @@ const DigitalLecturesPage = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="bg-white overflow-hidden cursor-pointer h-full flex flex-col transition-colors border border-gray-200"
+                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 shadow-sm"
                                 >
                                     <div className="h-1.5 w-full bg-[#FBCFE8]" />
                                     {/* Banner Image */}
@@ -176,34 +176,34 @@ const DigitalLecturesPage = () => {
 
                 {/* THCS Section */}
                 <div>
-                    <div className="mb-8 bg-[#EFF6FF] border-3 border-[#BFDBFE] p-6 rounded-3xl relative overflow-hidden">
+                    <div className="mb-8 bg-[#EFF6FF] border-3 border-[#BFDBFE] p-4 md:p-6 rounded-3xl relative overflow-hidden">
                         <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
-                            <div className="flex items-center gap-4">
-                                <div className="bg-white p-3 rounded-full border-3 border-[#BFDBFE]">
-                                    <GraduationCap size={32} className="text-[#3B82F6]" />
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="bg-white p-2 md:p-3 rounded-full border-3 border-[#BFDBFE] shrink-0">
+                                    <GraduationCap className="text-[#3B82F6] w-6 h-6 md:w-8 md:h-8" />
                                 </div>
                                 <div>
-                                    <h3 className="text-[24px] xl:text-[28px] 2xl:text-[32px] font-black text-[#3B82F6] mb-1" style={{ letterSpacing: '-0.5px' }}>
+                                    <h3 className="text-[20px] md:text-[24px] xl:text-[28px] 2xl:text-[32px] font-black text-[#3B82F6] mb-1" style={{ letterSpacing: '-0.5px' }}>
                                         Trung học cơ sở
                                     </h3>
-                                    <p className="text-[14px] text-[#3B82F6]/70 font-medium">
+                                    <p className="text-[12px] md:text-[14px] text-[#3B82F6]/70 font-medium">
                                         Cấp học tiếp theo sau Tiểu học
                                     </p>
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                <div className="bg-white rounded-full px-5 py-3 border-3 border-[#BFDBFE]">
-                                    <div className="text-[28px] xl:text-[32px] 2xl:text-[36px] font-black text-[#3B82F6] leading-none text-center">
+                                <div className="bg-white rounded-full px-4 py-2 md:px-5 md:py-3 border-3 border-[#BFDBFE]">
+                                    <div className="text-[20px] md:text-[28px] xl:text-[32px] 2xl:text-[36px] font-black text-[#3B82F6] leading-none text-center">
                                         {thcsClasses.length}
                                     </div>
-                                    <div className="text-[12px] text-[#3B82F6]/70 font-semibold mt-1 text-center">
+                                    <div className="text-[10px] md:text-[12px] text-[#3B82F6]/70 font-semibold mt-0.5 md:mt-1 text-center">
                                         lớp học
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                         {thcsClasses.map((classItem, index) => (
                             <Link
                                 key={classItem.id}
@@ -213,7 +213,7 @@ const DigitalLecturesPage = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="bg-white overflow-hidden cursor-pointer h-full flex flex-col transition-colors border border-gray-200"
+                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 shadow-sm"
                                 >
                                     <div className="h-1.5 w-full bg-[#BFDBFE]" />
                                     {/* Banner Image */}
