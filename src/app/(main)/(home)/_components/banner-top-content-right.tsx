@@ -50,6 +50,7 @@ const BannerTopContentRight = () => {
               width={73}
               height={84}
               className="rounded-full"
+              unoptimized
             />
           </div>
 
@@ -68,6 +69,7 @@ const BannerTopContentRight = () => {
               width={73}
               height={84}
               className="rounded-full"
+              unoptimized
             />
           </div>
 
@@ -86,6 +88,7 @@ const BannerTopContentRight = () => {
               width={73}
               height={84}
               className="rounded-full"
+              unoptimized
             />
           </div>
         </motion.div>
@@ -135,6 +138,7 @@ const BannerTopContentRight = () => {
                 width={73}
                 height={84}
                 className="rounded-full"
+                unoptimized
               />
             </div>
           </motion.div>
@@ -185,6 +189,7 @@ const BannerTopContentRight = () => {
                   width={73}
                   height={84}
                   className="rounded-full"
+                  unoptimized
                 />
               </div>
 
@@ -203,6 +208,7 @@ const BannerTopContentRight = () => {
                   width={100}
                   height={120}
                   className="rounded-full"
+                  unoptimized
                 />
               </div>
 
@@ -221,6 +227,7 @@ const BannerTopContentRight = () => {
                   width={73}
                   height={84}
                   className="rounded-full"
+                  unoptimized
                 />
               </div>
             </motion.div>
