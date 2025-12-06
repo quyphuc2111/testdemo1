@@ -1,132 +1,162 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { MOCK_DB_DATA, parseLearningData } from "@/lib/learning-data";
-import { LessonList } from "@/components/learning/LessonList";
-import { motion, AnimatePresence } from "motion/react";
-import Link from "next/link";
-import Image from "next/image";
-import { FaArrowLeft, FaArrowUp } from "react-icons/fa";
+import React, { useMemo, useState } from "react";
+import { getCategoriesBySubject, getLessons } from "../../_data/mock-data";
+import ExamCategoryTree from "../../_components/exam-category-tree";
+import ExamCardGrid from "../../_components/exam-card-grid";
+import ExamPagination from "../../_components/exam-pagination";
+import { FileQuestion } from "lucide-react";
 
 export default function SubjectPage({
   params,
 }: {
-  params: { classId: string; subjectId: string };
+  params: Promise<{ classId: string; subjectId: string }>;
 }) {
-  const router = useRouter();
-  const classId = decodeURIComponent(params.classId);
-  const subjectId = decodeURIComponent(params.subjectId);
+  const { classId: rawClassId, subjectId: rawSubjectId } = React.use(params);
+  const classId = decodeURIComponent(rawClassId);
+  const subjectId = decodeURIComponent(rawSubjectId);
 
-  const allTopics = useMemo(() => parseLearningData(MOCK_DB_DATA), []);
+  const [selectedCategory, setSelectedCategory] = useState<
+    number | string | null
+  >(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-  const currentTopics = useMemo(() => {
-    return allTopics.filter(
-      (t) => t.class === classId && t.subject === subjectId
-    );
-  }, [allTopics, classId, subjectId]);
+  const categories = useMemo(
+    () => getCategoriesBySubject(subjectId, classId),
+    [subjectId, classId]
+  );
+  const allLessons = useMemo(
+    () => getLessons(classId, subjectId),
+    [classId, subjectId]
+  );
 
-  const handleBackToClass = () => {
-    router.push(`/digital-learning-exam/${encodeURIComponent(classId)}`);
-  };
+  // Parse class number for styling
+  const classNumStr = classId.replace(/\D/g, "");
+  const classNum = parseInt(classNumStr) || 1;
+  const isTieuHoc = classNum >= 1 && classNum <= 5;
 
-  // Scroll to top logic
-  const [showScrollTop, setShowScrollTop] = useState(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Filter lessons based on selected category
+  const filteredLessons = useMemo(() => {
+    if (selectedCategory === null) {
+      return allLessons;
+    }
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+    // If selected is a topic (string id in our case for topics, or book id)
+    // In our mock data: Book IDs are strings "book-0", Topic IDs are strings "topic-0"
+
+    // Check if it's a book or topic
+    // We can search through categories to find what selectedCategory corresponds to.
+
+    // Find book
+    const selectedBook = categories.find((c) => c.id === selectedCategory);
+    if (selectedBook) {
+      return allLessons.filter((l) => l.book === selectedBook.name);
+    }
+
+    // Find topic
+    // Flatten topics
+    const allTopics = categories.flatMap((c) => c.children || []);
+    const selectedTopic = allTopics.find((t) => t.id === selectedCategory);
+    if (selectedTopic) {
+      return allLessons.filter((l) => l.topic === selectedTopic.name);
+    }
+
+    return allLessons;
+  }, [selectedCategory, categories, allLessons]);
+
+  // Stats
+  // const totalBooks = categories.length;
+  // const totalTopics = categories.reduce((sum, book) => sum + (book.children?.length || 0), 0);
+
+  // Pagination
+  const totalPages = Math.ceil(filteredLessons.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentLessons = filteredLessons.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen font-sans bg-slate-50 text-slate-900">
-      {/* Header / Breadcrumb Area */}
-      <div className="sticky top-0 z-40 bg-white border-b shadow-sm border-slate-200">
-        <div className="container px-4 py-3 mx-auto">
-          <div className="flex flex-col gap-4 justify-between md:flex-row md:items-center">
-            <div className="flex gap-4 items-center">
-              <button
-                onClick={handleBackToClass}
-                className="p-2 rounded-full transition-colors text-slate-500 hover:text-indigo-600 hover:bg-indigo-50"
-                title="Quay lại"
-              >
-                <FaArrowLeft />
-              </button>
-              <Link
-                href="/"
-                className="flex gap-1 items-center text-xl font-bold text-indigo-900"
-              >
-                <Image
-                  src="/images/gif/Learned.gif"
-                  alt="Learn"
-                  width={40}
-                  height={40}
-                  unoptimized
-                />
-                Học & Thi Trực Tuyến
-              </Link>
+    <div className="min-h-screen bg-white pt-28 relative">
+      {/* Main Content */}
+      <div
+        style={{ backgroundImage: 'url("/images/lectures/bg_lectures.png")' }}
+        className="w-full min-h-screen bg-cover bg-center bg-no-repeat "
+      >
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left column: overview + category */}
+          <aside className="w-full lg:w-[340px] shrink-0 lg:sticky lg:top-28 self-start max-h-[calc(100vh-120px)] overflow-hidden flex flex-col">
+            <div className="bg-white border border-gray-200 p-5 h-full overflow-y-auto custom-scrollbar rounded-xl">
+              <div className="flex items-center gap-2 mb-3">
+                <span
+                  className={`text-[12px] font-semibold px-3 py-1.5 border ${
+                    isTieuHoc
+                      ? "text-[#EC4899] border-[#FBCFE8] bg-[#FEF3F8]"
+                      : "text-[#3B82F6] border-[#BFDBFE] bg-[#EFF6FF]"
+                  }`}
+                >
+                  {classId}
+                </span>
+                <span className="text-[12px] font-semibold px-3 py-1.5 border border-gray-200 text-gray-700">
+                  {subjectId}
+                </span>
+              </div>
+              <h1 className="text-[20px] xl:text-[22px] font-bold text-[#0F3550] mb-2 leading-tight">
+                Học & Thi {subjectId}
+              </h1>
+              <p className="text-[14px] text-gray-600 mb-4">
+                Tìm thấy {filteredLessons.length} bài.
+              </p>
+
+              <ExamCategoryTree
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onSelectCategory={setSelectedCategory}
+              />
+            </div>
+          </aside>
+
+          {/* Lesson Grid Content */}
+          <main className="flex-1 pr-8 mt-6 pb-24 flex flex-col min-h-screen">
+            <div className="mb-6 bg-white border border-gray-200 px-5 py-4 rounded-xl">
+              <h2 className="text-[24px] xl:text-[26px] font-bold text-[#0F3550] leading-tight">
+                Danh sách bài học / đề thi
+              </h2>
+              <p className="text-[14px] text-gray-600 mt-1">
+                Tìm thấy {filteredLessons.length} kết quả
+              </p>
             </div>
 
-            {/* Breadcrumbs */}
-            <div className="flex gap-2 items-center text-sm font-medium text-slate-500">
-              <Link
-                href="/digital-learning-exam"
-                className="hover:text-indigo-600"
-              >
-                Trang chủ
-              </Link>
-              <span>/</span>
-              <Link
-                href={`/digital-learning-exam/${encodeURIComponent(classId)}`}
-                className="hover:text-indigo-600"
-              >
-                {classId}
-              </Link>
-              <span>/</span>
-              <span className="font-bold text-indigo-600">{subjectId}</span>
-            </div>
-          </div>
+            {currentLessons.length > 0 ? (
+              <ExamCardGrid lessons={currentLessons} />
+            ) : (
+              <div className="text-center py-16">
+                <FileQuestion
+                  size={64}
+                  className="mx-auto mb-4 text-gray-400"
+                />
+                <p className="text-[18px] text-gray-500 font-medium">
+                  Không tìm thấy nội dung nào
+                </p>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-auto">
+                <div className="mt-12">
+                  <ExamPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    totalItems={filteredLessons.length}
+                    pageSize={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                  />
+                </div>
+              </div>
+            )}
+          </main>
         </div>
       </div>
-
-      {/* Main Content Area */}
-      <div className="min-h-[calc(100vh-80px)] pt-8 pb-12">
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <LessonList
-            className={classId}
-            subjectName={subjectId}
-            topics={currentTopics}
-            onBack={handleBackToClass}
-          />
-        </motion.div>
-      </div>
-
-      {/* Scroll to Top Button */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            onClick={scrollToTop}
-            className="fixed right-8 bottom-8 z-50 p-4 text-white bg-indigo-600 rounded-full shadow-xl transition-colors hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300"
-            aria-label="Lên đầu trang"
-          >
-            <FaArrowUp />
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

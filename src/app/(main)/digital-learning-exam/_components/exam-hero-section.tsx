@@ -2,12 +2,12 @@ import React from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 
-export const HeroSection = () => {
+export const ExamHeroSection = () => {
   return (
     <div className="overflow-hidden relative mb-12 bg-white rounded-3xl border shadow-lg border-slate-100">
       {/* Background Gradients */}
-      <div className="absolute top-0 right-0 w-1/2 h-full from-indigo-50 to-transparent opacity-60 bg-linear-to-l" />
-      <div className="absolute bottom-0 left-0 w-1/2 h-full from-pink-50 to-transparent opacity-60 bg-linear-to-r" />
+      <div className="absolute top-0 right-0 w-1/2 h-full from-indigo-300 to-transparent opacity-60 bg-linear-to-l" />
+      <div className="absolute bottom-0 left-0 w-1/2 h-full from-pink-300 to-transparent opacity-60 bg-linear-to-r" />
 
       <div className="container relative z-10 px-6 py-12 mx-auto md:py-20 md:px-12">
         <div className="flex flex-col gap-8 items-center md:flex-row">
@@ -30,7 +30,7 @@ export const HeroSection = () => {
               </p>
 
               <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200">
+                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200 hover:scale-105 transition-all">
                   <span className="flex justify-center items-center w-8 h-8 text-indigo-600 bg-indigo-50 rounded-full">
                     📚
                   </span>
@@ -38,7 +38,7 @@ export const HeroSection = () => {
                     Đa dạng môn học
                   </span>
                 </div>
-                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200">
+                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200 hover:scale-105 transition-all">
                   <span className="flex justify-center items-center w-8 h-8 text-pink-600 bg-pink-50 rounded-full">
                     🎯
                   </span>
@@ -46,7 +46,7 @@ export const HeroSection = () => {
                     Luyện thi hiệu quả
                   </span>
                 </div>
-                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200">
+                <div className="flex gap-2 items-center px-4 py-2 bg-white rounded-full border shadow-sm border-slate-200 hover:scale-105 transition-all">
                   <span className="flex justify-center items-center w-8 h-8 text-green-600 bg-green-50 rounded-full">
                     🚀
                   </span>
@@ -66,12 +66,12 @@ export const HeroSection = () => {
               className="relative z-10"
             >
               {/* Using a generic educational illustration or placeholder if specific one isn't available */}
-              <div className="relative mx-auto w-full max-w-md aspect-video md:aspect-square">
+              <div className="relative mx-auto max-w-md aspect-video md:aspect-square">
                 <Image
-                  src="/images/gif/online-learning.gif"
+                  src="/images/gif/gif-15.gif"
                   alt="Online Learning"
                   fill
-                  className="object-contain"
+                  className="object-contain border-2 shadow-lg rounded-2xl border-slate-100 hover:scale-105 transition-all"
                   unoptimized
                   onError={(e) => {
                     // Fallback to a nice gradient box if image fails
