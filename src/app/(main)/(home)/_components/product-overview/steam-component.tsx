@@ -10,87 +10,80 @@ type steamComponentProps = {
 
 const StemOverview: React.FC<steamComponentProps> = (props) => {
   return (
-    <motion.div
-      className="w-full h-[630px] xl:h-[720px] 2xl:h-[1080px] flex items-center justify-center 
-                gap-x-14 xl:gap-x-24 2xl:gap-x-32 bg-no-repeat bg-contain"
-      style={{ backgroundImage: "url('/images/STEM.svg')" }}
-      initial={{ opacity: 0 }} // Initial opacity set to 0
-      whileInView={{ opacity: 1 }} // Appear when in the viewport
-      transition={{ duration: 1, ease: "easeInOut" }} // Apply the same duration and easing as the "Mindmap" section
-    >
-      <div className="rounded-xl overflow-hidden">
+    <div className="w-full bg-white py-20 xl:py-32">
+      <div className="container mx-auto px-4 md:px-8 xl:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Image Left */}
         <motion.div
-          className="rounded-xl 2xl:w-[680px] 2xl:h-[516px] xl:w-max w-[470px] xl:h-[431px] h-[360px]"
-          initial={{ opacity: 0, scale: 0.8, x: 50 }}
-          whileInView={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{
-            duration: 0.7,
-            ease: "easeOut",
-          }}
+          className="w-full order-1"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          <Image
-            src="/images/stem-1.svg"
-            alt="STEM"
-            width={680}
-            height={516}
-            className="rounded-xl w-full h-full object-cover"
-          />
+          <div className="relative aspect-4/3 rounded-3xl overflow-hidden shadow-2xl border-4 border-blue-50">
+            <Image
+              src="/images/stem-1.svg"
+              alt="STEM"
+              fill
+              className="object-cover"
+            />
+          </div>
         </motion.div>
-      </div>
 
-      <section className=" 2xl:-translate-y-12">
-        <motion.h1
-          className="font-semibold text-[36px]"
-          initial={{ opacity: 0, y: 50 }} // Start with offset
-          whileInView={{ opacity: 1, y: 0 }} // Transition to its original position
-          transition={{ duration: 0.8, delay: 0.2 }} // Apply the same timing as the "Mindmap" title
+        {/* Content Right */}
+        <motion.section
+          className="order-2"
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
-          <TypingEffect
-            text="STEM"
-            speed={100}
-            typingDelay={500}
-            className="text-[24px] xl:text-[28px]  2xl:text-[36px] font-semibold"
-          />
-        </motion.h1>
+          <h1 className="font-bold text-3xl md:text-5xl text-[#004C70] mb-8">
+            <TypingEffect
+              text="STEM"
+              speed={100}
+              typingDelay={500}
+              className="inline-block"
+            />
+          </h1>
 
-        <motion.ul
-          className="flex flex-col gap-y-5 mt-4 min-w-[400px]"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{
-            duration: 1,
-            delay: 0.5, // Add delay to match "Mindmap" effect
-          }}
-        >
-          {props.stemListFeatures.map((feature, index) => (
-            <motion.li
-              key={index}
-              className="flex items-center gap-x-2"
-              initial={{ opacity: 0, x: -100 }} // Start with offset
-              whileInView={{ opacity: 1, x: 0 }} // Transition to the center
-              transition={{
-                duration: 0.7,
-                delay: index * 0.1,
-                ease: [0.25, 0.1, 0.25, 1], // Apply similar easing for consistency
-              }}
-            >
-              <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
-              <motion.span
-                className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
+          <motion.ul
+            className="flex flex-col gap-y-6"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
+          >
+            {props.stemListFeatures.map((feature, index) => (
+              <motion.li
+                key={index}
+                className="flex items-center gap-x-4"
+                initial={{ opacity: 0, x: 50 }} // Slide from right
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{
-                  duration: 0.7,
-                  ease: "easeInOut",
+                  duration: 0.5,
+                  delay: index * 0.1,
                 }}
               >
-                <p>{feature.title}</p>
-              </motion.span>
-            </motion.li>
-          ))}
-        </motion.ul>
-      </section>
-    </motion.div>
+                <div className="w-12 h-12 relative shrink-0">
+                  <Image
+                    src="/images/gif/gif-12.gif"
+                    fill
+                    alt="feature-icon"
+                    className="object-contain"
+                    unoptimized
+                  />
+                </div>
+                <span className="text-lg md:text-xl text-slate-700 font-medium">
+                  {feature.title}
+                </span>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.section>
+      </div>
+    </div>
   );
 };
 

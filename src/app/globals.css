@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -11,15 +16,7 @@
   --font-sans: var(--font-pf-beausans);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-
-
-}
-
+/* Enforce light mode always */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -45,4 +42,46 @@ body {
 
 .category-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #FF9AA2;
+}
+
+
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes shine {
+  100% {
+    left: 125%;
+  }
+}
+
+.animate-shine {
+  animation: shine 1s;
 }
