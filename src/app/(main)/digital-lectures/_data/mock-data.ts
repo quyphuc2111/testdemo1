@@ -35,7 +35,16 @@ export type Lesson = {
 };
 
 // Mock classes data - Lớp 1-9
-const teachers = ["Nguyễn Văn A", "Trần Thị B", "Lê Văn C", "Phạm Thị D", "Hoàng Văn E", "Võ Thị F", "Đặng Văn G", "Bùi Thị H"];
+const teachers = [
+  "Nguyễn Văn A",
+  "Trần Thị B",
+  "Lê Văn C",
+  "Phạm Thị D",
+  "Hoàng Văn E",
+  "Võ Thị F",
+  "Đặng Văn G",
+  "Bùi Thị H",
+];
 
 export const mockClasses: Class[] = [
   // Tiểu học - Lớp 1-5
@@ -422,7 +431,8 @@ export const mockLessons: Lesson[] = [
     duration: "45 phút",
     views: 1250,
     thumbnail: "/images/lectures/image_lecture.png",
-    link_online: "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000"
+    link_online:
+      "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000",
   },
   {
     id: 112,
@@ -432,7 +442,8 @@ export const mockLessons: Lesson[] = [
     duration: "45 phút",
     views: 1180,
     thumbnail: "/images/lectures/image_lecture.png",
-    link_online: "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000"
+    link_online:
+      "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000",
   },
   {
     id: 113,
@@ -442,16 +453,97 @@ export const mockLessons: Lesson[] = [
     duration: "40 phút",
     views: 1100,
     thumbnail: "/images/lectures/image_lecture.png",
-    link_online: "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000"
+    link_online:
+      "https://docs.google.com/presentation/d/e/2PACX-1vT-T-T-T-T/embed?start=false&loop=false&delayms=3000",
   },
-  { id: 114, title: "Bài 4: So sánh số", topic: "Chủ đề 1: Các số từ 0 đến 10", book: "Kết nối tri thức với cuộc sống", duration: "50 phút", views: 1050, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 121, title: "Bài 7: Hình vuông, hình tròn, hình tam giác", topic: "Chủ đề 2: Làm quen với một số hình phẳng", book: "Kết nối tri thức với cuộc sống", duration: "45 phút", views: 980, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 122, title: "Bài 8: Thực hành lắp ghép, xếp hình", topic: "Chủ đề 2: Làm quen với một số hình phẳng", book: "Kết nối tri thức với cuộc sống", duration: "50 phút", views: 920, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 131, title: "Bài 10: Phép cộng trong phạm vi 10", topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10", book: "Kết nối tri thức với cuộc sống", duration: "45 phút", views: 1150, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 132, title: "Bài 11: Phép trừ trong phạm vi 10", topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10", book: "Kết nối tri thức với cuộc sống", duration: "45 phút", views: 1080, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 133, title: "Bài 12: Bảng cộng, bảng trừ", topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10", book: "Kết nối tri thức với cuộc sống", duration: "50 phút", views: 1020, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 211, title: "Bài 14: Khối lập phương, khối hộp chữ nhật", topic: "Chủ đề 4: Làm quen với một số hình khối", book: "Chân trời sáng tạo", duration: "45 phút", views: 950, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 212, title: "Bài 15: Vị trí, định hướng trong không gian", topic: "Chủ đề 4: Làm quen với một số hình khối", book: "Chân trời sáng tạo", duration: "40 phút", views: 890, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 221, title: "Bài 17: Ôn tập các số trong phạm vi 10", topic: "Chủ đề 5: Ôn tập học kì 1", book: "Chân trời sáng tạo", duration: "50 phút", views: 1100, thumbnail: "/images/lectures/image_lecture.png" },
-  { id: 222, title: "Bài 18: Ôn tập phép cộng, phép trừ", topic: "Chủ đề 5: Ôn tập học kì 1", book: "Chân trời sáng tạo", duration: "50 phút", views: 1050, thumbnail: "/images/lectures/image_lecture.png" },
+  {
+    id: 114,
+    title: "Bài 4: So sánh số",
+    topic: "Chủ đề 1: Các số từ 0 đến 10",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "50 phút",
+    views: 1050,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 121,
+    title: "Bài 7: Hình vuông, hình tròn, hình tam giác",
+    topic: "Chủ đề 2: Làm quen với một số hình phẳng",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "45 phút",
+    views: 980,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 122,
+    title: "Bài 8: Thực hành lắp ghép, xếp hình",
+    topic: "Chủ đề 2: Làm quen với một số hình phẳng",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "50 phút",
+    views: 920,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 131,
+    title: "Bài 10: Phép cộng trong phạm vi 10",
+    topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "45 phút",
+    views: 1150,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 132,
+    title: "Bài 11: Phép trừ trong phạm vi 10",
+    topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "45 phút",
+    views: 1080,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 133,
+    title: "Bài 12: Bảng cộng, bảng trừ",
+    topic: "Chủ đề 3: Phép cộng, phép trừ trong phạm vi 10",
+    book: "Kết nối tri thức với cuộc sống",
+    duration: "50 phút",
+    views: 1020,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 211,
+    title: "Bài 14: Khối lập phương, khối hộp chữ nhật",
+    topic: "Chủ đề 4: Làm quen với một số hình khối",
+    book: "Chân trời sáng tạo",
+    duration: "45 phút",
+    views: 950,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 212,
+    title: "Bài 15: Vị trí, định hướng trong không gian",
+    topic: "Chủ đề 4: Làm quen với một số hình khối",
+    book: "Chân trời sáng tạo",
+    duration: "40 phút",
+    views: 890,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 221,
+    title: "Bài 17: Ôn tập các số trong phạm vi 10",
+    topic: "Chủ đề 5: Ôn tập học kì 1",
+    book: "Chân trời sáng tạo",
+    duration: "50 phút",
+    views: 1100,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
+  {
+    id: 222,
+    title: "Bài 18: Ôn tập phép cộng, phép trừ",
+    topic: "Chủ đề 5: Ôn tập học kì 1",
+    book: "Chân trời sáng tạo",
+    duration: "50 phút",
+    views: 1050,
+    thumbnail: "/images/lectures/image_lecture.png",
+  },
 ];
