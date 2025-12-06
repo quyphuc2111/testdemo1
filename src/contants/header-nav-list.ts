@@ -22,7 +22,7 @@ export const navList: NavListType[] = [
     // },
     {
         title: "Diễn đàn",
-        link: "https://forum.bkt.net.vn/",
+        link: "/diendan",
     },
 
     // {
