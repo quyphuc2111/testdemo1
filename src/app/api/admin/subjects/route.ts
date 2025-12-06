@@ -21,13 +21,13 @@ export async function GET(req: Request) {
 
     const where: Prisma.SubjectWhereInput = {};
     if (search) {
-      where.name = { contains: search };
+      where.subjectName = { contains: search };
     }
 
     const [subjects, total] = await Promise.all([
       prisma.subject.findMany({
         where,
-        orderBy: { name: "asc" },
+        orderBy: { subjectName: "asc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -51,16 +51,16 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const name = (body?.name || "").toString().trim();
+    const subjectName = (body?.name || "").toString().trim();
 
-    if (!name) {
+    if (!subjectName) {
       return NextResponse.json(
         errorResponse("Thiếu tên môn học", 400),
         { status: 400 }
       );
     }
 
-    const subject = await prisma.subject.create({ data: { name } });
+    const subject = await prisma.subject.create({ data: { subjectName } });
     return NextResponse.json(
       successResponse(subject, "Tạo môn học thành công", 201, null)
     );

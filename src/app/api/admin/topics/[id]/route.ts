@@ -36,12 +36,12 @@ export async function PUT(
 
   try {
     const body = await req.json();
-    const name = body?.name?.toString().trim();
+    const topicName = body?.topicName?.toString().trim();
     const gradeId = Number(body?.gradeId);
     const subjectId = Number(body?.subjectId);
     const bookId = Number(body?.bookId);
 
-    if (!name || Number.isNaN(gradeId) || Number.isNaN(subjectId) || Number.isNaN(bookId)) {
+    if (!topicName || Number.isNaN(gradeId) || Number.isNaN(subjectId) || Number.isNaN(bookId)) {
       return NextResponse.json(
         errorResponse("Thiếu hoặc sai dữ liệu", 400),
         { status: 400 }
@@ -50,7 +50,7 @@ export async function PUT(
 
     const updated = await prisma.topic.update({
       where: { id },
-      data: { name, gradeId, subjectId, bookId },
+      data: { topicName, gradeId, subjectId, bookId },
     });
 
     return NextResponse.json(successResponse(updated, "Cập nhật chủ đề thành công", 200, null));

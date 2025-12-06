@@ -46,12 +46,18 @@ export async function GET(req: Request) {
     }
 
     if (search) {
-      where.name = { contains: search };
+      where.lessonName = { contains: search };
     }
 
     const [lessons, total] = await Promise.all([
       prisma.lesson.findMany({
         where,
+        include: {
+          grade: true,
+          subject: true,
+          book: true,
+          topic: true,
+        },
         orderBy: { id: "asc" },
         skip: (page - 1) * limit,
         take: limit,
@@ -76,7 +82,7 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const name = (body?.name || "").toString().trim();
+    const lessonName = (body?.lessonName || "").toString().trim();
     const gradeId = Number(body?.gradeId);
     const subjectId = Number(body?.subjectId);
     const bookId = Number(body?.bookId);
@@ -86,21 +92,21 @@ export async function POST(req: Request) {
       : null;
 
     if (
-      !name ||
+      !lessonName ||
       Number.isNaN(gradeId) ||
       Number.isNaN(subjectId) ||
       Number.isNaN(bookId) ||
       Number.isNaN(topicId)
     ) {
       return NextResponse.json(
-        errorResponse("Thiếu hoặc sai dữ liệu (name, gradeId, subjectId, bookId, topicId)", 400),
+        errorResponse("Thiếu hoặc sai dữ liệu (lessonName, gradeId, subjectId, bookId, topicId)", 400),
         { status: 400 }
       );
     }
 
     const lesson = await prisma.lesson.create({
       data: {
-        name,
+        lessonName,
         gradeId,
         subjectId,
         bookId,
