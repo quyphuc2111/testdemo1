@@ -1,17 +1,19 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { getCategoriesBySubject, getLessons } from "../../_data/mock-data";
+import { getCategoriesBySubject, getTopics } from "../../_data/mock-data";
 import ExamCategoryTree from "../../_components/exam-category-tree";
 import ExamCardGrid from "../../_components/exam-card-grid";
 import ExamPagination from "../../_components/exam-pagination";
-import { FileQuestion } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Folder, ArrowLeft } from "lucide-react";
 
 export default function SubjectPage({
   params,
 }: {
   params: Promise<{ classId: string; subjectId: string }>;
 }) {
+  const router = useRouter();
   const { classId: rawClassId, subjectId: rawSubjectId } = React.use(params);
   const classId = decodeURIComponent(rawClassId);
   const subjectId = decodeURIComponent(rawSubjectId);
@@ -26,8 +28,9 @@ export default function SubjectPage({
     () => getCategoriesBySubject(subjectId, classId),
     [subjectId, classId]
   );
-  const allLessons = useMemo(
-    () => getLessons(classId, subjectId),
+
+  const allTopics = useMemo(
+    () => getTopics(classId, subjectId),
     [classId, subjectId]
   );
 
@@ -36,47 +39,45 @@ export default function SubjectPage({
   const classNum = parseInt(classNumStr) || 1;
   const isTieuHoc = classNum >= 1 && classNum <= 5;
 
-  // Filter lessons based on selected category
-  const filteredLessons = useMemo(() => {
+  // Filter topics based on selected category (Book)
+  const filteredTopics = useMemo(() => {
     if (selectedCategory === null) {
-      return allLessons;
+      return allTopics;
     }
-
-    // If selected is a topic (string id in our case for topics, or book id)
-    // In our mock data: Book IDs are strings "book-0", Topic IDs are strings "topic-0"
-
-    // Check if it's a book or topic
-    // We can search through categories to find what selectedCategory corresponds to.
 
     // Find book
     const selectedBook = categories.find((c) => c.id === selectedCategory);
     if (selectedBook) {
-      return allLessons.filter((l) => l.book === selectedBook.name);
+      return allTopics.filter((t) => t.book === selectedBook.name);
     }
 
-    // Find topic
-    // Flatten topics
-    const allTopics = categories.flatMap((c) => c.children || []);
-    const selectedTopic = allTopics.find((t) => t.id === selectedCategory);
-    if (selectedTopic) {
-      return allLessons.filter((l) => l.topic === selectedTopic.name);
-    }
+    return allTopics;
+  }, [selectedCategory, categories, allTopics]);
 
-    return allLessons;
-  }, [selectedCategory, categories, allLessons]);
+  // Map topics to grid card format
+  const currentGridItems = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const items = filteredTopics.slice(startIndex, endIndex);
 
-  // Stats
-  // const totalBooks = categories.length;
-  // const totalTopics = categories.reduce((sum, book) => sum + (book.children?.length || 0), 0);
+    return items.map((t) => ({
+      id: t.id,
+      title: t.name,
+      topic: t.name,
+      book: t.book || "Chưa phân loại",
+      duration: "",
+      views: 0,
+      thumbnail: "/images/lectures/image_lecture.png", // Placeholder
+      link_online: t.url || undefined,
+      type: "topic",
+    }));
+  }, [filteredTopics, currentPage]);
 
   // Pagination
-  const totalPages = Math.ceil(filteredLessons.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentLessons = filteredLessons.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredTopics.length / itemsPerPage);
 
   return (
-    <div className="min-h-screen bg-white pt-28 relative">
+    <div className="min-h-screen bg-white pt-20 relative">
       {/* Main Content */}
       <div
         style={{ backgroundImage: 'url("/images/lectures/bg_lectures.png")' }}
@@ -86,6 +87,13 @@ export default function SubjectPage({
           {/* Left column: overview + category */}
           <aside className="w-full lg:w-[340px] shrink-0 lg:sticky lg:top-28 self-start max-h-[calc(100vh-120px)] overflow-hidden flex flex-col">
             <div className="bg-white border border-gray-200 p-5 h-full overflow-y-auto custom-scrollbar rounded-xl">
+              <button
+                onClick={() => router.back()}
+                className="flex items-center gap-2 text-gray-500 hover:text-[#0F3550] transition-colors mb-4 font-medium"
+              >
+                <ArrowLeft size={20} />
+                Quay lại
+              </button>
               <div className="flex items-center gap-2 mb-3">
                 <span
                   className={`text-[12px] font-semibold px-3 py-1.5 border ${
@@ -104,13 +112,16 @@ export default function SubjectPage({
                 Học & Thi {subjectId}
               </h1>
               <p className="text-[14px] text-gray-600 mb-4">
-                Tìm thấy {filteredLessons.length} bài.
+                Tìm thấy {filteredTopics.length} chủ đề.
               </p>
 
               <ExamCategoryTree
                 categories={categories}
                 selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
+                onSelectCategory={(id) => {
+                  setSelectedCategory(id);
+                  setCurrentPage(1); // Reset page on category change
+                }}
               />
             </div>
           </aside>
@@ -119,23 +130,20 @@ export default function SubjectPage({
           <main className="flex-1 pr-8 mt-6 pb-24 flex flex-col min-h-screen">
             <div className="mb-6 bg-white border border-gray-200 px-5 py-4 rounded-xl">
               <h2 className="text-[24px] xl:text-[26px] font-bold text-[#0F3550] leading-tight">
-                Danh sách bài học / đề thi
+                Danh sách chủ đề
               </h2>
               <p className="text-[14px] text-gray-600 mt-1">
-                Tìm thấy {filteredLessons.length} kết quả
+                Tìm thấy {filteredTopics.length} kết quả
               </p>
             </div>
 
-            {currentLessons.length > 0 ? (
-              <ExamCardGrid lessons={currentLessons} />
+            {currentGridItems.length > 0 ? (
+              <ExamCardGrid lessons={currentGridItems} />
             ) : (
               <div className="text-center py-16">
-                <FileQuestion
-                  size={64}
-                  className="mx-auto mb-4 text-gray-400"
-                />
+                <Folder size={64} className="mx-auto mb-4 text-gray-400" />
                 <p className="text-[18px] text-gray-500 font-medium">
-                  Không tìm thấy nội dung nào
+                  Không tìm thấy chủ đề nào
                 </p>
               </div>
             )}
@@ -147,7 +155,7 @@ export default function SubjectPage({
                   <ExamPagination
                     currentPage={currentPage}
                     totalPages={totalPages}
-                    totalItems={filteredLessons.length}
+                    totalItems={filteredTopics.length}
                     pageSize={itemsPerPage}
                     onPageChange={setCurrentPage}
                   />

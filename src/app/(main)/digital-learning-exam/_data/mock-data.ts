@@ -311,9 +311,18 @@ export function parseLearningData(rows: RawLearningRow[]): Topic[] {
 
     // Determine if new topic
     if (row.topic_name) {
+      // Try to extract ID from URL
+      let topicId = `topic-${index}`;
+      if (row.topic_id) {
+        const match = row.topic_id.match(/[?&]id=(\d+)/);
+        if (match) {
+          topicId = match[1];
+        }
+      }
+
       // New topic start
       currentTopic = {
-        id: `topic-${index}`,
+        id: topicId,
         name: row.topic_name,
         url: row.topic_id,
         lessons: [],
@@ -542,3 +551,8 @@ export const mockClasses = getUniqueClasses(MOCK_DB_DATA).map((c) => {
     thumbnail: `/images/class/class_${classNum}.png`,
   };
 });
+
+export const getTopics = (classId: string, subjectId: string): Topic[] => {
+  const topics = parseLearningData(MOCK_DB_DATA);
+  return topics.filter((t) => t.class === classId && t.subject === subjectId);
+};
