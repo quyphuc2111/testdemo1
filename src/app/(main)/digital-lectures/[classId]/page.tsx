@@ -2,10 +2,11 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useGetLectureSubjects } from "@/hooks/digital-lecture/useDigitalLectureHook";
+import { ArrowLeft } from "lucide-react";
+import { useGetLectureSubjects, useGetLectureClasses } from "@/hooks/digital-lecture/useDigitalLectureHook";
 import LectureErrorComponent from "@/components/exceptions/lecture-error";
 import LectureLoadingComponent from "@/components/exceptions/lecture-loading";
+import LectureEmptyComponent from "@/components/exceptions/lecture-empty";
 
 const SubjectListPage = () => {
   const params = useParams();
@@ -13,10 +14,12 @@ const SubjectListPage = () => {
 
   const { data: subjects, isLoading, isError, refetch } = useGetLectureSubjects(classId);
 
-  const classNum = Number(classId);
-  const isTieuHoc = classNum >= 1 && classNum <= 5;
-  const heroBg = isTieuHoc ? "#FEF3F8" : "#EFF6FF";
-  const heroBorder = isTieuHoc ? "#FBCFE8" : "#BFDBFE";
+  // Fetch classes to get schoolLevel
+  const { data: classesData } = useGetLectureClasses();
+  const currentClass = classesData?.find((cls) => cls.id === Number(classId));
+  const isPrimarySchool = currentClass?.schoolLevel === "Tiểu học";
+  const heroBg = isPrimarySchool ? "#FEF3F8" : "#EFF6FF";
+  const heroBorder = isPrimarySchool ? "#FBCFE8" : "#BFDBFE";
 
   return (
     <div className="min-h-screen pt-24 bg-white relative">
@@ -73,7 +76,7 @@ const SubjectListPage = () => {
           )}
 
           {/* Subject Grid */}
-          {!isLoading && !isError && subjects && (
+          {!isLoading && !isError && subjects && subjects.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
               {subjects.map((subject, index) => {
                 const bgColors = ['#B5EAD7', '#FFB7B2', '#E2F0CB', '#FFDAC1'];
@@ -86,7 +89,7 @@ const SubjectListPage = () => {
                     className="block h-full"
                   >
                     <div
-                      className="group relative h-[120px] sm:h-[130px] md:h-[140px] bg-white rounded-2xl sm:rounded-3xl border-2 flex overflow-hidden transition-transform "
+                      className="group relative h-[120px] sm:h-[140px] md:h-[140px] bg-white rounded-2xl sm:rounded-3xl border-2 flex overflow-hidden transition-transform "
                       style={{ borderColor: bgColor }}
                     >
                       {/* Left Decoration Strip */}
@@ -96,26 +99,34 @@ const SubjectListPage = () => {
                       />
                       {/* Right Content Area */}
                       <div className="flex-1 py-3 sm:py-4 md:py-5 pl-3 sm:pl-4 md:pl-5 pr-2 flex flex-col justify-center min-w-0">
-                        <span className="text-[10px] sm:text-xs uppercase tracking-wider font-bold opacity-60 mb-0.5 sm:mb-1 truncate" style={{ color: '#0F3550' }}>Môn học</span>
-                        <h3 className="text-[16px] sm:text-[18px] md:text-[20px] font-black leading-tight text-[#0F3550] truncate">
+                        <span className="text-[10px] sm:text-xs uppercase tracking-wider font-bold opacity-60 mb-1.5 sm:mb-2 truncate" style={{ color: '#0F3550' }}>Môn học</span>
+                        <h3 className="text-[16px] sm:text-[18px] md:text-[20px] font-black leading-tight text-[#0F3550] truncate mb-3 sm:mb-4">
                           {subject.name}
                         </h3>
-                        <div className="mt-2 sm:mt-3 flex items-center text-[11px] sm:text-xs md:text-sm font-semibold opacity-70 flex-wrap gap-1" style={{ color: '#0F3550' }}>
-                          <span>{subject.bookCount} bộ sách</span>
-                          <span className="mx-1 sm:mx-2">•</span>
-                          <span>{subject.topicCount} chủ đề</span>
+                        <div className="flex items-center flex-nowrap gap-1.5 sm:gap-2">
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold bg-[#E8F1FF] text-[#0F3550] border border-[#BFDBFE]">
+                            {subject.bookCount} bộ sách
+                          </span>
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold bg-[#E2F0CB] text-[#0F3550] border border-[#B5EAD7]">
+                            {subject.topicCount} chủ đề
+                          </span>
+                          <span className="inline-flex items-center px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold bg-[#FEF3F8] text-[#0F3550] border border-[#FBCFE8]">
+                            {subject.lessonCount} bài giảng
+                          </span>
                         </div>
                       </div>
-                      {/* Right Arrow */}
-                      <div className="w-8 sm:w-10 md:w-12 flex items-center justify-center shrink-0 mr-1 sm:mr-2">
-                        <ArrowRight size={20} className="sm:w-6 sm:h-6 text-[#0F3550] opacity-40" />
-                      </div>
+
                     </div>
                   </Link>
                 );
               })}
             </div>
-          )}
+          ) : !isLoading && !isError && subjects && subjects.length === 0 ? (
+            <LectureEmptyComponent
+              title="Chưa có môn học"
+              description={`Hiện tại chưa có môn học nào trong lớp ${classId}`}
+            />
+          ) : null}
         </div>
       </div>
 

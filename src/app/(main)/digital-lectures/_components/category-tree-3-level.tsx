@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BookOpen, Folder, ChevronRight, Grid3x3 } from "lucide-react";
 import type { LectureCategory } from "@/types/digital-lecture.type";
 
@@ -66,6 +66,21 @@ const CategoryTree3Level = ({
     new Set()
   );
 
+  // Auto-expand book when a topic inside it is selected
+  useEffect(() => {
+    if (selectedCategory && categories.length > 0) {
+      setExpandedCategories((prevExpanded) => {
+        const newExpanded = new Set(prevExpanded);
+        categories.forEach((book) => {
+          if (book.children?.some((topic) => topic.id === selectedCategory)) {
+            newExpanded.add(book.id);
+          }
+        });
+        return newExpanded;
+      });
+    }
+  }, [selectedCategory, categories]);
+
   const toggleCategory = (categoryId: number) => {
     const newExpanded = new Set(expandedCategories);
     if (newExpanded.has(categoryId)) {
@@ -80,7 +95,7 @@ const CategoryTree3Level = ({
     onSelectCategory(categoryId);
   };
 
-  const renderCategory = (category: LectureCategory | { id: number; name: string }, level: number = 0) => {
+  const renderCategory = (category: LectureCategory | { id: number; name: string; lessonCount?: number }, level: number = 0) => {
     // Only render up to level 1 (Topic), not level 2 (Lesson)
     if (level > 1) {
       return null;
@@ -89,18 +104,41 @@ const CategoryTree3Level = ({
     const isBook = level === 0;
     const hasChildren = isBook && 'children' in category && category.children && category.children.length > 0;
     const isExpanded = expandedCategories.has(category.id);
-    const isSelected = selectedCategory === category.id;
+    
+    // Check if this category is selected
+    // For book: check if selectedCategory is one of its children
+    // For topic: check if selectedCategory equals its id
+    let isSelected = false;
+    if (isBook && hasChildren) {
+      // Book is active if any of its children (topics) is selected
+      isSelected = (category as LectureCategory).children?.some(
+        (topic) => topic.id === selectedCategory
+      ) || false;
+    } else {
+      // Topic is active if it matches selectedCategory
+      isSelected = selectedCategory === category.id;
+    }
 
     // Determine Base Color Class
     let colorClass = isBook ? COLORS.book : COLORS.topic;
     if (isSelected) colorClass = COLORS.selected;
 
     const categoryName = isBook ? (category as LectureCategory).book : (category as { name: string }).name;
+    
+    // Calculate lesson count
+    let lessonCount = 0;
+    if (isBook && hasChildren) {
+      // For book: sum all lessonCount from children topics
+      lessonCount = (category as LectureCategory).children?.reduce((sum, topic) => sum + (topic.lessonCount || 0), 0) || 0;
+    } else if (!isBook) {
+      // For topic: use lessonCount directly
+      lessonCount = (category as { lessonCount?: number }).lessonCount || 0;
+    }
 
     return (
       <div key={category.id} className="mb-2">
         <div
-          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 active:scale-[0.98] ${colorClass}`}
+          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 ${colorClass}`}
           style={{
             marginLeft: level === 0 ? 0 : '16px',
             width: level === 0 ? '100%' : 'calc(100% - 16px)'
@@ -128,6 +166,18 @@ const CategoryTree3Level = ({
           <span className="flex-1 text-[15px] xl:text-[16px] font-bold tracking-wide">
             {categoryName}
           </span>
+
+          {/* Lesson Count */}
+          {lessonCount > 0 && (
+            <span className={`text-[13px] xl:text-[14px] font-semibold px-2 py-1 rounded-lg ${isSelected
+              ? "bg-white/20 text-white"
+              : isBook
+                ? "bg-[#557C6C]/10 text-[#557C6C]"
+                : "bg-[#71825B]/10 text-[#71825B]"
+              }`}>
+              {lessonCount}
+            </span>
+          )}
 
           {/* Chevron Icon for expandable */}
           {hasChildren && (
@@ -165,7 +215,7 @@ const CategoryTree3Level = ({
       >
         {/* All Categories Option */}
         <div
-          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 active:scale-[0.98] ${selectedCategory === null
+          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 ${selectedCategory === null
             ? COLORS.selected
             : COLORS.allParams
             }`}

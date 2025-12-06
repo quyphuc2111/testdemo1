@@ -9,6 +9,7 @@ import { GraduationCap, School } from "lucide-react";
 import { useGetLectureClasses } from "@/hooks/digital-lecture/useDigitalLectureHook";
 import LectureErrorComponent from "@/components/exceptions/lecture-error";
 import LectureLoadingComponent from "@/components/exceptions/lecture-loading";
+import LectureEmptyComponent from "@/components/exceptions/lecture-empty";
 import type { LectureClass } from "@/types/digital-lecture.type";
 
 const DigitalLecturesPage = () => {
@@ -30,7 +31,7 @@ const DigitalLecturesPage = () => {
         }
 
         const elementary = classes.filter((cls) => cls.schoolLevel === "Tiểu học");
-        const middleSchool = classes.filter((cls) => cls.schoolLevel === "Trung học cơ sở");
+        const middleSchool = classes.filter((cls) => cls.schoolLevel === "THCS" || cls.schoolLevel === "Trung học cơ sở");
 
         return {
             elementaryClasses: elementary,
@@ -166,67 +167,74 @@ const DigitalLecturesPage = () => {
                             </div>
 
                             {/* Classes Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
-                                {level.classes.map((classItem, index) => (
-                                    <Link
-                                        key={classItem.id}
-                                        href={`/digital-lectures/${classItem.id}`}
-                                    >
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ duration: 0.3, delay: index * 0.05 }}
-                                            className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200"
+                            {level.classes.length > 0 ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                                    {level.classes.map((classItem, index) => (
+                                        <Link
+                                            key={classItem.id}
+                                            href={`/digital-lectures/${classItem.id}`}
                                         >
-                                            <div className={`h-1.5 w-full ${level.colors.accentColor}`} />
-                                            {/* Banner Image */}
-                                            <div className="relative w-full aspect-video overflow-hidden bg-gray-50">
-                                                <Image
-                                                    src={getThumbnail(classItem)}
-                                                    alt={classItem.name}
-                                                    fill
-                                                    className="object-cover object-center"
-                                                />
-                                            </div>
-
-                                            {/* Content */}
-                                            <div className="p-5 flex flex-col flex-1">
-                                                {/* Class Title */}
-                                                <h3 className="text-[20px] xl:text-[22px] font-bold text-[#004C70] mb-4 leading-tight">
-                                                    {classItem.name}
-                                                </h3>
-
-                                                {/* Subject Badges */}
-                                                <div className="flex flex-wrap gap-2 mb-4">
-                                                    {classItem.subject.slice(0, 3).map((subject) => (
-                                                        <span
-                                                            key={subject.subjectId}
-                                                            className={`text-[11px] font-semibold text-[#004C70] ${level.colors.subjectBadgeBg} px-2.5 py-1 rounded`}
-                                                        >
-                                                            {subject.subjectName}
-                                                        </span>
-                                                    ))}
-                                                    {classItem.subject.length > 3 && (
-                                                        <span className={`text-[11px] font-semibold text-[#004C70] ${level.colors.subjectBadgeBg} px-2.5 py-1 rounded`}>
-                                                            +{classItem.subject.length - 3}
-                                                        </span>
-                                                    )}
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ duration: 0.3, delay: index * 0.05 }}
+                                                className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200"
+                                            >
+                                                <div className={`h-1.5 w-full ${level.colors.accentColor}`} />
+                                                {/* Banner Image */}
+                                                <div className="relative w-full aspect-video overflow-hidden bg-gray-50">
+                                                    <Image
+                                                        src={getThumbnail(classItem)}
+                                                        alt={classItem.name}
+                                                        fill
+                                                        className="object-cover object-center"
+                                                    />
                                                 </div>
 
-                                                {/* Stats Badges */}
-                                                <div className="flex flex-wrap gap-2">
-                                                    <span className="text-[11px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded">
-                                                        {classItem.bookCount} sách
-                                                    </span>
-                                                    <span className="text-[11px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded">
-                                                        {classItem.topicCount} chủ đề
-                                                    </span>
+                                                {/* Content */}
+                                                <div className="p-5 flex flex-col flex-1">
+                                                    {/* Class Title */}
+                                                    <h3 className="text-[20px] xl:text-[22px] font-bold text-[#004C70] mb-4 leading-tight">
+                                                        {classItem.name}
+                                                    </h3>
+
+                                                    {/* Subject Badges */}
+                                                    <div className="flex flex-wrap gap-2 mb-4">
+                                                        {classItem.subject.slice(0, 3).map((subject) => (
+                                                            <span
+                                                                key={subject.subjectId}
+                                                                className={`text-[11px] font-semibold text-[#004C70] ${level.colors.subjectBadgeBg} px-2.5 py-1 rounded`}
+                                                            >
+                                                                {subject.subjectName}
+                                                            </span>
+                                                        ))}
+                                                        {classItem.subject.length > 3 && (
+                                                            <span className={`text-[11px] font-semibold text-[#004C70] ${level.colors.subjectBadgeBg} px-2.5 py-1 rounded`}>
+                                                                +{classItem.subject.length - 3}
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Stats Badges */}
+                                                    <div className="flex flex-wrap gap-2">
+                                                        <span className="text-[11px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded">
+                                                            {classItem.bookCount} sách
+                                                        </span>
+                                                        <span className="text-[11px] font-semibold text-gray-600 bg-gray-50 px-2.5 py-1 rounded">
+                                                            {classItem.topicCount} chủ đề
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </motion.div>
-                                    </Link>
-                                ))}
-                            </div>
+                                            </motion.div>
+                                        </Link>
+                                    ))}
+                                </div>
+                            ) : (
+                                <LectureEmptyComponent
+                                    title="Chưa có lớp học"
+                                    description={`Hiện tại chưa có lớp học nào trong cấp ${level.title}`}
+                                />
+                            )}
                         </div>
                     );
                 })}

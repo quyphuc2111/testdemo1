@@ -34,6 +34,7 @@ export interface LectureSubject {
     name: string;
     bookCount: number;
     topicCount: number;
+    lessonCount: number;
 }
 
 /**
@@ -42,6 +43,7 @@ export interface LectureSubject {
 export interface CategoryTopic {
     id: number;
     name: string;
+    lessonCount: number;
 }
 
 /**

@@ -1,23 +1,17 @@
-
 "use client";
 
 import { motion } from "motion/react";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import { FileQuestion } from "lucide-react";
 
-interface LectureErrorComponentProps {
-    onRetry?: () => void;
+interface LectureEmptyComponentProps {
+    title?: string;
+    description?: string;
 }
 
-const LectureErrorComponent = ({ onRetry }: LectureErrorComponentProps) => {
-    const handleRetry = () => {
-        if (onRetry) {
-            onRetry();
-        } else {
-            // Fallback: reload the page
-            window.location.reload();
-        }
-    };
-
+const LectureEmptyComponent = ({
+    title = "Không tìm thấy bài giảng",
+    description = "Hiện tại chưa có bài giảng nào trong danh mục này"
+}: LectureEmptyComponentProps) => {
     return (
         <div className="relative">
             {/* Decorative Pattern - Left Side */}
@@ -57,42 +51,28 @@ const LectureErrorComponent = ({ onRetry }: LectureErrorComponentProps) => {
                         transition={{ duration: 0.4 }}
                         className="flex flex-col items-center gap-8 max-w-lg text-center"
                     >
-                        {/* Flat Error Icon */}
-                        <div className="w-24 h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-xl flex items-center justify-center">
-                            <AlertCircle className="w-12 h-12 text-[#EC4899]" />
+                        {/* Flat Empty Icon */}
+                        <div className="relative">
+                            <div className="w-24 h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-xl flex items-center justify-center">
+                                <FileQuestion className="w-12 h-12 text-[#EC4899]" />
+                            </div>
                         </div>
 
-                        {/* Error Message */}
+                        {/* Empty Message */}
                         <div className="space-y-3">
                             <h3 className="text-[32px] md:text-[36px] font-bold text-[#004C70]">
-                                Đã xảy ra lỗi
+                                {title}
                             </h3>
                             <p className="text-[18px] text-gray-600 font-medium">
-                                Không thể tải dữ liệu
-                            </p>
-                            <p className="text-[16px] text-gray-500">
-                                Vui lòng kiểm tra kết nối mạng và thử lại
+                                {description}
                             </p>
                         </div>
-
-                        {/* Flat Retry Button */}
-                        <motion.button
-
-                            onClick={handleRetry}
-                            className=" hover:cursor-pointer flex items-center gap-3 px-8 py-4 bg-[#EC4899] text-white rounded-xl font-bold text-[16px] border-2 border-[#EC4899] hover:bg-[#DB2777] hover:border-[#DB2777] transition-all"
-                        >
-                            <RefreshCw className="w-5 h-5" />
-                            <span>Thử lại</span>
-                        </motion.button>
-
-
                     </motion.div>
                 </div>
             </div>
-
-
         </div>
     );
 };
 
-export default LectureErrorComponent;
+export default LectureEmptyComponent;
+
