@@ -74,7 +74,7 @@ const SubjectListPage = () => {
 
           {/* Subject Grid */}
           {!isLoading && !isError && subjects && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
               {subjects.map((subject, index) => {
                 const bgColors = ['#B5EAD7', '#FFB7B2', '#E2F0CB', '#FFDAC1'];
                 const bgColor = bgColors[index % bgColors.length]; // Cycle mainly through pastel backgrounds
@@ -86,7 +86,7 @@ const SubjectListPage = () => {
                     className="block h-full"
                   >
                     <div
-                      className="group relative h-[120px] sm:h-[130px] md:h-[140px] bg-white rounded-2xl sm:rounded-3xl border-2 flex overflow-hidden transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                      className="group relative h-[120px] sm:h-[130px] md:h-[140px] bg-white rounded-2xl sm:rounded-3xl border-2 flex overflow-hidden transition-transform "
                       style={{ borderColor: bgColor }}
                     >
                       {/* Left Decoration Strip */}

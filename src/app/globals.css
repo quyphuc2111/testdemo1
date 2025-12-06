@@ -26,3 +26,23 @@ body {
   font-family: var(--font-pf-beausans), system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
 }
+
+/* Custom Scrollbar for Category Tree */
+.category-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.category-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb {
+  background: #FFB7B2;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FF9AA2;
+}
