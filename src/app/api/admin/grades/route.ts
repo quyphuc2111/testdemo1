@@ -22,7 +22,7 @@ export async function GET(req: Request) {
     const where: Prisma.GradeWhereInput = {};
 
     if (search) {
-      where.name = {
+      where.gradeName = {
         contains: search,
       };
     }
@@ -30,7 +30,10 @@ export async function GET(req: Request) {
     const [grades, total] = await Promise.all([
       prisma.grade.findMany({
         where,
-        orderBy: { name: "asc" },
+        include: {
+          schoolLevel: true,
+        },
+        orderBy: { gradeName: "asc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -56,17 +59,19 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const name = (body?.name || "").toString().trim();
+    const gradeName = (body?.name || "").toString().trim();
+    const schoolLevelId = Number(body?.schoolLevelId);
+    const image = body?.image?.toString().trim() || null;
 
-    if (!name) {
+    if (!gradeName || Number.isNaN(schoolLevelId)) {
       return NextResponse.json(
-        errorResponse("Thiếu tên lớp", 400),
+        errorResponse("Thiếu tên lớp hoặc cấp học", 400),
         { status: 400 }
       );
     }
 
     const grade = await prisma.grade.create({
-      data: { name },
+      data: { gradeName, schoolLevelId, image },
     });
 
     return NextResponse.json(

@@ -21,13 +21,13 @@ export async function GET(req: Request) {
 
     const where: Prisma.BookWhereInput = {};
     if (search) {
-      where.name = { contains: search };
+      where.bookName = { contains: search };
     }
 
     const [books, total] = await Promise.all([
       prisma.book.findMany({
         where,
-        orderBy: { name: "asc" },
+        orderBy: { bookName: "asc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -51,16 +51,16 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const name = (body?.name || "").toString().trim();
+    const bookName = (body?.name || "").toString().trim();
 
-    if (!name) {
+    if (!bookName) {
       return NextResponse.json(
         errorResponse("Thiếu tên sách", 400),
         { status: 400 }
       );
     }
 
-    const book = await prisma.book.create({ data: { name } });
+    const book = await prisma.book.create({ data: { bookName } });
     return NextResponse.json(
       successResponse(book, "Tạo sách thành công", 201, null)
     );
