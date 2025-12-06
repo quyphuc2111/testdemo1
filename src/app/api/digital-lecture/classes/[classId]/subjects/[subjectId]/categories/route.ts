@@ -27,6 +27,11 @@ export async function GET(
             },
             include: {
                 book: true,
+                _count: {
+                    select: {
+                        lessons: true,
+                    },
+                },
             },
             orderBy: [
                 { bookId: "asc" },
@@ -46,7 +51,7 @@ export async function GET(
             {
                 id: number;
                 book: string;
-                children: Array<{ id: number; name: string }>;
+                children: Array<{ id: number; name: string; lessonCount: number }>;
             }
         >();
 
@@ -54,14 +59,15 @@ export async function GET(
             if (!bookMap.has(topic.bookId)) {
                 bookMap.set(topic.bookId, {
                     id: topic.bookId,
-                    book: topic.book.name,
+                    book: topic.book.bookName,
                     children: [],
                 });
             }
 
             bookMap.get(topic.bookId)!.children.push({
                 id: topic.id,
-                name: topic.name,
+                name: topic.topicName,
+                lessonCount: topic._count.lessons,
             });
         });
 

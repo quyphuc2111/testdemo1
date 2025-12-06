@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
     successResponse,
     errorResponse,
@@ -33,7 +34,7 @@ export async function GET(
         );
 
         // Build where clause
-        const where: any = {
+        const where: Prisma.LessonWhereInput = {
             gradeId: classId,
             subjectId: subjectId,
         };
@@ -65,15 +66,16 @@ export async function GET(
         // Map sang format theo spec
         const data = lessons.map((lesson) => ({
             id: lesson.id,
-            title: lesson.name, // spec yêu cầu "title" không phải "name"
+            title: lesson.lessonName, // spec yêu cầu "title" không phải "name"
             topicId: lesson.topicId,
-            topic: lesson.topic.name,
+            topic: lesson.topic.topicName,
             bookId: lesson.bookId,
-            book: lesson.book.name,
+            book: lesson.book.bookName,
             classId: lesson.gradeId,
-            className: lesson.grade.name,
+            className: lesson.grade.gradeName,
             subjectId: lesson.subjectId,
-            subjectName: lesson.subject.name,
+            subjectName: lesson.subject.subjectName,
+            lectureOnlineLink: lesson.lectureUrl, // Thêm lectureOnlineLink để hiển thị badge
         }));
 
         const pagination = createPaginationMeta(page, limit, total);

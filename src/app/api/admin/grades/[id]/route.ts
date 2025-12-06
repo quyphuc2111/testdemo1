@@ -70,7 +70,7 @@ export async function PUT(
     return NextResponse.json(
       successResponse(updated, "Cập nhật lớp thành công", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/admin/grades/[id] error:", error);
     return NextResponse.json(
       errorResponse("Không cập nhật được lớp", 500),
@@ -101,7 +101,7 @@ export async function DELETE(
     return NextResponse.json(
       successResponse(null, "Đã xoá lớp", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/admin/grades/[id] error:", error);
     return NextResponse.json(
       errorResponse(

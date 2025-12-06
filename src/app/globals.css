@@ -20,30 +20,58 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-pf-beausans), system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-pf-beausans), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
 }
+
+/* Custom Scrollbar for Category Tree */
+.category-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.category-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb {
+  background: #FFB7B2;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.category-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #FF9AA2;
+}
+
+
 
 @keyframes blob {
   0% {
     transform: translate(0px, 0px) scale(1);
   }
+
   33% {
     transform: translate(30px, -50px) scale(1.1);
   }
+
   66% {
     transform: translate(-20px, 20px) scale(0.9);
   }
+
   100% {
     transform: translate(0px, 0px) scale(1);
   }
 }
+
 .animate-blob {
   animation: blob 7s infinite;
 }
+
 .animation-delay-2000 {
   animation-delay: 2s;
 }
+
 .animation-delay-4000 {
   animation-delay: 4s;
 }
@@ -53,6 +81,7 @@ body {
     left: 125%;
   }
 }
+
 .animate-shine {
   animation: shine 1s;
 }

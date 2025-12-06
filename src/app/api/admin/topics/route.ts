@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
   successResponse,
   errorResponse,
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
       20
     );
 
-    const where: any = {};
+    const where: Prisma.TopicWhereInput = {};
 
     if (gradeIdParam) {
       const gradeId = Number(gradeIdParam);
@@ -39,13 +40,18 @@ export async function GET(req: Request) {
     }
 
     if (search) {
-      where.name = { contains: search, mode: "insensitive" };
+      where.topicName = { contains: search };
     }
 
     const [topics, total] = await Promise.all([
       prisma.topic.findMany({
         where,
-        orderBy: { name: "asc" },
+        include: {
+          grade: true,
+          subject: true,
+          book: true,
+        },
+        orderBy: { topicName: "asc" },
         skip: (page - 1) * limit,
         take: limit,
       }),
@@ -69,25 +75,25 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const name = (body?.name || "").toString().trim();
+    const topicName = (body?.topicName || "").toString().trim();
     const gradeId = Number(body?.gradeId);
     const subjectId = Number(body?.subjectId);
     const bookId = Number(body?.bookId);
 
     if (
-      !name ||
+      !topicName ||
       Number.isNaN(gradeId) ||
       Number.isNaN(subjectId) ||
       Number.isNaN(bookId)
     ) {
       return NextResponse.json(
-        errorResponse("Thiếu hoặc sai dữ liệu (name, gradeId, subjectId, bookId)", 400),
+        errorResponse("Thiếu hoặc sai dữ liệu (topicName, gradeId, subjectId, bookId)", 400),
         { status: 400 }
       );
     }
 
     const topic = await prisma.topic.create({
-      data: { name, gradeId, subjectId, bookId },
+      data: { topicName, gradeId, subjectId, bookId },
     });
 
     return NextResponse.json(

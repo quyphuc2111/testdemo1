@@ -1,19 +1,15 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useState } from "react";
-import { BookOpen, Folder, ChevronRight, Grid3x3, LayoutGrid } from "lucide-react";
-
-type Category = {
-  id: number;
-  name: string;
-  children?: Category[];
-};
+import { useState, useEffect } from "react";
+import { BookOpen, Folder, ChevronRight, Grid3x3 } from "lucide-react";
+import type { LectureCategory } from "@/types/digital-lecture.type";
 
 type CategoryTreeProps = {
-  categories: Category[];
+  categories: LectureCategory[];
   selectedCategory: number | null;
   onSelectCategory: (categoryId: number | null) => void;
+  totalLessons?: number;
 };
 
 // Pastel Color Palette
@@ -64,10 +60,26 @@ const CategoryTree3Level = ({
   categories,
   selectedCategory,
   onSelectCategory,
+  totalLessons = 0,
 }: CategoryTreeProps) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(
     new Set()
   );
+
+  // Auto-expand book when a topic inside it is selected
+  useEffect(() => {
+    if (selectedCategory && categories.length > 0) {
+      setExpandedCategories((prevExpanded) => {
+        const newExpanded = new Set(prevExpanded);
+        categories.forEach((book) => {
+          if (book.children?.some((topic) => topic.id === selectedCategory)) {
+            newExpanded.add(book.id);
+          }
+        });
+        return newExpanded;
+      });
+    }
+  }, [selectedCategory, categories]);
 
   const toggleCategory = (categoryId: number) => {
     const newExpanded = new Set(expandedCategories);
@@ -83,34 +95,62 @@ const CategoryTree3Level = ({
     onSelectCategory(categoryId);
   };
 
-  const renderCategory = (category: Category, level: number = 0) => {
+  const renderCategory = (category: LectureCategory | { id: number; name: string; lessonCount?: number }, level: number = 0) => {
     // Only render up to level 1 (Topic), not level 2 (Lesson)
     if (level > 1) {
       return null;
     }
 
-    const hasChildren = category.children && category.children.length > 0 && level < 1;
-    const isExpanded = expandedCategories.has(category.id);
-    const isSelected = selectedCategory === category.id;
     const isBook = level === 0;
+    const hasChildren = isBook && 'children' in category && category.children && category.children.length > 0;
+    const isExpanded = expandedCategories.has(category.id);
+    
+    // Check if this category is selected
+    // For book: check if selectedCategory is one of its children
+    // For topic: check if selectedCategory equals its id
+    let isSelected = false;
+    if (isBook && hasChildren) {
+      // Book is active if any of its children (topics) is selected
+      isSelected = (category as LectureCategory).children?.some(
+        (topic) => topic.id === selectedCategory
+      ) || false;
+    } else {
+      // Topic is active if it matches selectedCategory
+      isSelected = selectedCategory === category.id;
+    }
 
     // Determine Base Color Class
     let colorClass = isBook ? COLORS.book : COLORS.topic;
     if (isSelected) colorClass = COLORS.selected;
 
+    const categoryName = isBook ? (category as LectureCategory).book : (category as { name: string }).name;
+    
+    // Calculate lesson count
+    let lessonCount = 0;
+    if (isBook && hasChildren) {
+      // For book: sum all lessonCount from children topics
+      lessonCount = (category as LectureCategory).children?.reduce((sum, topic) => sum + (topic.lessonCount || 0), 0) || 0;
+    } else if (!isBook) {
+      // For topic: use lessonCount directly
+      lessonCount = (category as { lessonCount?: number }).lessonCount || 0;
+    }
+
     return (
       <div key={category.id} className="mb-2">
         <div
-          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 active:scale-[0.98] ${colorClass}`}
+          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 ${colorClass}`}
           style={{
             marginLeft: level === 0 ? 0 : '16px',
             width: level === 0 ? '100%' : 'calc(100% - 16px)'
           }}
           onClick={() => {
-            if (hasChildren) {
+            if (isBook && hasChildren) {
+              // Book: only expand/collapse, don't filter
               toggleCategory(category.id);
+            } else {
+              // Topic: filter by selecting it
+              handleCategoryClick(category.id);
             }
-            handleCategoryClick(category.id);
           }}
         >
           {/* Icon */}
@@ -124,8 +164,20 @@ const CategoryTree3Level = ({
 
           {/* Category Name */}
           <span className="flex-1 text-[15px] xl:text-[16px] font-bold tracking-wide">
-            {category.name}
+            {categoryName}
           </span>
+
+          {/* Lesson Count */}
+          {lessonCount > 0 && (
+            <span className={`text-[13px] xl:text-[14px] font-semibold px-2 py-1 rounded-lg ${isSelected
+              ? "bg-white/20 text-white"
+              : isBook
+                ? "bg-[#557C6C]/10 text-[#557C6C]"
+                : "bg-[#71825B]/10 text-[#71825B]"
+              }`}>
+              {lessonCount}
+            </span>
+          )}
 
           {/* Chevron Icon for expandable */}
           {hasChildren && (
@@ -152,22 +204,18 @@ const CategoryTree3Level = ({
   };
 
   return (
-    <div className="p-2">
-      {/* Header */}
-      <div className="mb-6 pb-2 border-b-2 border-dashed border-[#FFB7B2]/50">
-        <h3 className="text-[20px] xl:text-[24px] font-black text-[#FF9AA2] flex items-center gap-3 tracking-tight">
-          <div className="bg-[#FF9AA2] p-2 rounded-xl text-white rotate-3">
-            <LayoutGrid size={24} strokeWidth={2.5} />
-          </div>
-          Danh mục
-        </h3>
-      </div>
-
-      {/* Categories List */}
-      <div className="space-y-2">
+    <div className="h-full flex flex-col">
+      {/* Categories List with Scroll */}
+      <div
+        className="flex-1 overflow-y-auto pr-2 space-y-2 category-scrollbar"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#FFB7B2 #f1f1f1',
+        }}
+      >
         {/* All Categories Option */}
         <div
-          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 active:scale-[0.98] ${selectedCategory === null
+          className={`flex items-center gap-3 px-4 py-3 rounded-2xl cursor-pointer select-none transition-colors hover:brightness-95 ${selectedCategory === null
             ? COLORS.selected
             : COLORS.allParams
             }`}
@@ -178,9 +226,17 @@ const CategoryTree3Level = ({
               <Grid3x3 size={20} strokeWidth={2.5} />
             </IconWrapper>
           </div>
-          <span className="text-[15px] xl:text-[16px] font-bold tracking-wide">
+          <span className="flex-1 text-[15px] xl:text-[16px] font-bold tracking-wide">
             Tất cả
           </span>
+          {totalLessons > 0 && (
+            <span className={`text-[13px] xl:text-[14px] font-semibold px-2 py-1 rounded-lg ${selectedCategory === null
+              ? "bg-white/20 text-white"
+              : "bg-[#8C6A5D]/10 text-[#8C6A5D]"
+              }`}>
+              {totalLessons}
+            </span>
+          )}
         </div>
 
         {/* Category Tree */}
