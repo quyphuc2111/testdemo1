@@ -1,0 +1,1632 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "BKT LMS API Documentation",
+        "description": "Tài liệu API cho Bài giảng số và các thao tác quản trị CRUD",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Máy chủ phát triển local"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Digital Lecture",
+            "description": "Các API endpoint cho nội dung bài giảng số"
+        },
+        {
+            "name": "Admin - Sách",
+            "description": "Các thao tác CRUD cho sách"
+        },
+        {
+            "name": "Admin - Lớp",
+            "description": "Các thao tác CRUD cho lớp học"
+        },
+        {
+            "name": "Admin - Môn học",
+            "description": "Các thao tác CRUD cho môn học"
+        },
+        {
+            "name": "Admin - Chủ đề",
+            "description": "Các thao tác CRUD cho chủ đề"
+        },
+        {
+            "name": "Admin - Bài giảng",
+            "description": "Các thao tác CRUD cho bài giảng"
+        },
+        {
+            "name": "Tiện ích",
+            "description": "Các endpoint tiện ích"
+        }
+    ],
+    "paths": {
+        "/api/digital-lecture/classes": {
+            "get": {
+                "tags": [
+                    "Digital Lecture"
+                ],
+                "summary": "Lấy danh sách lớp",
+                "description": "Trả về danh sách lớp kèm môn học, số chủ đề và số sách",
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClassesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/digital-lecture/classes/{classId}/subjects": {
+            "get": {
+                "tags": [
+                    "Digital Lecture"
+                ],
+                "summary": "Lấy danh sách môn học theo lớp",
+                "description": "Trả về danh sách các môn học của một lớp cụ thể",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID lớp học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SubjectsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/digital-lecture/classes/{classId}/subjects/{subjectId}/categories": {
+            "get": {
+                "tags": [
+                    "Digital Lecture"
+                ],
+                "summary": "Lấy danh mục (sách/chủ đề) theo môn học",
+                "description": "Trả về danh sách các sách và chủ đề của chúng cho một môn học cụ thể",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID lớp học"
+                    },
+                    {
+                        "name": "subjectId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID môn học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CategoriesResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/digital-lecture/classes/{classId}/subjects/{subjectId}/lessons": {
+            "get": {
+                "tags": [
+                    "Digital Lecture"
+                ],
+                "summary": "Lấy danh sách bài giảng theo môn học",
+                "description": "Trả về danh sách bài giảng có phân trang cho một môn học cụ thể, có thể lọc theo chủ đề",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID lớp học"
+                    },
+                    {
+                        "name": "subjectId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID môn học"
+                    },
+                    {
+                        "name": "topicId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Lọc theo ID chủ đề (tùy chọn)"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 8
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LessonsResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/digital-lecture/classes/{classId}/subjects/{subjectId}/lessons/{lessonId}": {
+            "get": {
+                "tags": [
+                    "Digital Lecture"
+                ],
+                "summary": "Lấy chi tiết bài giảng",
+                "description": "Trả về thông tin chi tiết về một bài giảng cụ thể",
+                "parameters": [
+                    {
+                        "name": "classId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID lớp học"
+                    },
+                    {
+                        "name": "subjectId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID môn học"
+                    },
+                    {
+                        "name": "lessonId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID bài giảng"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LessonDetailResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Không tìm thấy bài giảng",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Lỗi máy chủ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/books": {
+            "get": {
+                "tags": [
+                    "Admin - Sách"
+                ],
+                "summary": "Lấy tất cả sách",
+                "description": "Trả về danh sách sách có phân trang với tùy chọn tìm kiếm",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Tìm kiếm theo tên sách"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BooksListResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin - Sách"
+                ],
+                "summary": "Tạo sách mới",
+                "description": "Tạo một sách mới trong hệ thống",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tạo sách thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Yêu cầu không hợp lệ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/admin/books/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Sách"
+                ],
+                "summary": "Lấy sách theo ID",
+                "description": "Trả về thông tin chi tiết của một sách",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của sách"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Không tìm thấy sách"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Sách"
+                ],
+                "summary": "Cập nhật sách",
+                "description": "Cập nhật thông tin của một sách",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của sách"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateBookRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cập nhật sách thành công",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BookResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Sách"
+                ],
+                "summary": "Xóa sách",
+                "description": "Xóa một sách khỏi hệ thống",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của sách"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Xóa sách thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/grades": {
+            "get": {
+                "tags": [
+                    "Admin - Lớp"
+                ],
+                "summary": "Lấy tất cả lớp",
+                "description": "Trả về danh sách lớp học có phân trang với tùy chọn tìm kiếm",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Tìm kiếm theo tên lớp"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin - Lớp"
+                ],
+                "summary": "Tạo lớp mới",
+                "description": "Tạo một lớp học mới trong hệ thống",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên lớp học"
+                                    }
+                                },
+                                "required": [
+                                    "name"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tạo lớp thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/grades/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Lớp"
+                ],
+                "summary": "Lấy lớp theo ID",
+                "description": "Trả về thông tin chi tiết của một lớp học",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của lớp học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Lớp"
+                ],
+                "summary": "Cập nhật lớp",
+                "description": "Cập nhật thông tin của một lớp học",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của lớp học"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên lớp học"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cập nhật lớp thành công"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Lớp"
+                ],
+                "summary": "Xóa lớp",
+                "description": "Xóa một lớp học khỏi hệ thống",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của lớp học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Xóa lớp thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/subjects": {
+            "get": {
+                "tags": [
+                    "Admin - Môn học"
+                ],
+                "summary": "Lấy tất cả môn học",
+                "description": "Trả về danh sách môn học có phân trang với tùy chọn tìm kiếm",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Tìm kiếm theo tên môn học"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin - Môn học"
+                ],
+                "summary": "Tạo môn học mới",
+                "description": "Tạo một môn học mới trong hệ thống",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên môn học"
+                                    }
+                                },
+                                "required": [
+                                    "name"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tạo môn học thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/subjects/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Môn học"
+                ],
+                "summary": "Lấy môn học theo ID",
+                "description": "Trả về thông tin chi tiết của một môn học",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của môn học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Môn học"
+                ],
+                "summary": "Cập nhật môn học",
+                "description": "Cập nhật thông tin của một môn học",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của môn học"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên môn học"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cập nhật môn học thành công"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Môn học"
+                ],
+                "summary": "Xóa môn học",
+                "description": "Xóa một môn học khỏi hệ thống",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của môn học"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Xóa môn học thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/topics": {
+            "get": {
+                "tags": [
+                    "Admin - Chủ đề"
+                ],
+                "summary": "Lấy tất cả chủ đề",
+                "description": "Trả về danh sách chủ đề có phân trang với tùy chọn tìm kiếm và lọc",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Tìm kiếm theo tên chủ đề"
+                    },
+                    {
+                        "name": "gradeId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Lọc theo ID lớp học"
+                    },
+                    {
+                        "name": "subjectId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Lọc theo ID môn học"
+                    },
+                    {
+                        "name": "bookId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Lọc theo ID sách"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin - Chủ đề"
+                ],
+                "summary": "Tạo chủ đề mới",
+                "description": "Tạo một chủ đề mới trong hệ thống",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên chủ đề"
+                                    },
+                                    "gradeId": {
+                                        "type": "integer",
+                                        "description": "ID lớp học"
+                                    },
+                                    "subjectId": {
+                                        "type": "integer",
+                                        "description": "ID môn học"
+                                    },
+                                    "bookId": {
+                                        "type": "integer",
+                                        "description": "ID sách"
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "gradeId",
+                                    "subjectId",
+                                    "bookId"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tạo chủ đề thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/topics/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Chủ đề"
+                ],
+                "summary": "Lấy chủ đề theo ID",
+                "description": "Trả về thông tin chi tiết của một chủ đề",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của chủ đề"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Chủ đề"
+                ],
+                "summary": "Cập nhật chủ đề",
+                "description": "Cập nhật thông tin của một chủ đề",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của chủ đề"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "Tên chủ đề"
+                                    },
+                                    "gradeId": {
+                                        "type": "integer",
+                                        "description": "ID lớp học"
+                                    },
+                                    "subjectId": {
+                                        "type": "integer",
+                                        "description": "ID môn học"
+                                    },
+                                    "bookId": {
+                                        "type": "integer",
+                                        "description": "ID sách"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cập nhật chủ đề thành công"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Chủ đề"
+                ],
+                "summary": "Xóa chủ đề",
+                "description": "Xóa một chủ đề khỏi hệ thống",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của chủ đề"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Xóa chủ đề thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/lessons": {
+            "get": {
+                "tags": [
+                    "Admin - Bài giảng"
+                ],
+                "summary": "Lấy tất cả bài giảng",
+                "description": "Trả về danh sách bài giảng có phân trang với tùy chọn tìm kiếm và lọc",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Tìm kiếm theo tiêu đề bài giảng"
+                    },
+                    {
+                        "name": "topicId",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Lọc theo ID chủ đề"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số trang"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Số mục trên mỗi trang"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Admin - Bài giảng"
+                ],
+                "summary": "Tạo bài giảng mới",
+                "description": "Tạo một bài giảng mới trong hệ thống",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Tiêu đề bài giảng"
+                                    },
+                                    "topicId": {
+                                        "type": "integer",
+                                        "description": "ID chủ đề"
+                                    },
+                                    "lectureOnlineLink": {
+                                        "type": "string",
+                                        "description": "Link video bài giảng online"
+                                    }
+                                },
+                                "required": [
+                                    "title",
+                                    "topicId"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tạo bài giảng thành công"
+                    }
+                }
+            }
+        },
+        "/api/admin/lessons/{id}": {
+            "get": {
+                "tags": [
+                    "Admin - Bài giảng"
+                ],
+                "summary": "Lấy bài giảng theo ID",
+                "description": "Trả về thông tin chi tiết của một bài giảng",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của bài giảng"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Admin - Bài giảng"
+                ],
+                "summary": "Cập nhật bài giảng",
+                "description": "Cập nhật thông tin của một bài giảng",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của bài giảng"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "description": "Tiêu đề bài giảng"
+                                    },
+                                    "topicId": {
+                                        "type": "integer",
+                                        "description": "ID chủ đề"
+                                    },
+                                    "lectureOnlineLink": {
+                                        "type": "string",
+                                        "description": "Link video bài giảng online"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Cập nhật bài giảng thành công"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin - Bài giảng"
+                ],
+                "summary": "Xóa bài giảng",
+                "description": "Xóa một bài giảng khỏi hệ thống",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID của bài giảng"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Xóa bài giảng thành công"
+                    }
+                }
+            }
+        },
+        "/api/catalog/tree": {
+            "get": {
+                "tags": [
+                    "Tiện ích"
+                ],
+                "summary": "Lấy cấu trúc cây danh mục",
+                "description": "Trả về cấu trúc phân cấp của toàn bộ danh mục (lớp, môn, sách, chủ đề, bài giảng)",
+                "responses": {
+                    "200": {
+                        "description": "Thành công"
+                    }
+                }
+            }
+        },
+        "/api/health": {
+            "get": {
+                "tags": [
+                    "Tiện ích"
+                ],
+                "summary": "Kiểm tra sức khỏe hệ thống",
+                "description": "Endpoint để kiểm tra trạng thái hoạt động của API",
+                "responses": {
+                    "200": {
+                        "description": "Dịch vụ đang hoạt động bình thường"
+                    }
+                }
+            }
+        },
+        "/api/import/catalog": {
+            "post": {
+                "tags": [
+                    "Tiện ích"
+                ],
+                "summary": "Import dữ liệu danh mục từ Excel",
+                "description": "Upload file Excel để import dữ liệu lớp, môn, sách, chủ đề, bài giảng hàng loạt",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary",
+                                        "description": "File Excel chứa dữ liệu danh mục"
+                                    }
+                                },
+                                "required": [
+                                    "file"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Import thành công"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Success"
+                    },
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "object"
+                    },
+                    "pagination": {
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                            "page": {
+                                "type": "integer"
+                            },
+                            "limit": {
+                                "type": "integer"
+                            },
+                            "total": {
+                                "type": "integer"
+                            },
+                            "hasFirstPage": {
+                                "type": "boolean"
+                            },
+                            "hasLastPage": {
+                                "type": "boolean"
+                            },
+                            "hasPreviousPage": {
+                                "type": "boolean"
+                            },
+                            "hasNextPage": {
+                                "type": "boolean"
+                            }
+                        }
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "statusCode": {
+                        "type": "integer",
+                        "example": 500
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Thông báo lỗi"
+                    },
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "data": {
+                        "type": "null"
+                    },
+                    "pagination": {
+                        "type": "null"
+                    }
+                }
+            },
+            "ClassesResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        },
+                                        "subject": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "subjectId": {
+                                                        "type": "string"
+                                                    },
+                                                    "subjectName": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "topicCount": {
+                                            "type": "integer"
+                                        },
+                                        "bookCount": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "SubjectsResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "CategoriesResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "book": {
+                                            "type": "string"
+                                        },
+                                        "children": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "LessonsResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "title": {
+                                            "type": "string"
+                                        },
+                                        "topicId": {
+                                            "type": "integer"
+                                        },
+                                        "topic": {
+                                            "type": "string"
+                                        },
+                                        "bookId": {
+                                            "type": "integer"
+                                        },
+                                        "book": {
+                                            "type": "string"
+                                        },
+                                        "classId": {
+                                            "type": "integer"
+                                        },
+                                        "className": {
+                                            "type": "string"
+                                        },
+                                        "subjectId": {
+                                            "type": "integer"
+                                        },
+                                        "subjectName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "LessonDetailResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "topicId": {
+                                        "type": "integer"
+                                    },
+                                    "topic": {
+                                        "type": "string"
+                                    },
+                                    "bookId": {
+                                        "type": "integer"
+                                    },
+                                    "book": {
+                                        "type": "string"
+                                    },
+                                    "lectureOnlineLink": {
+                                        "type": "string"
+                                    },
+                                    "classId": {
+                                        "type": "integer"
+                                    },
+                                    "className": {
+                                        "type": "string"
+                                    },
+                                    "subjectId": {
+                                        "type": "integer"
+                                    },
+                                    "subjectName": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "Book": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CreateBookRequest": {
+                "type": "object",
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Tên sách"
+                    }
+                }
+            },
+            "UpdateBookRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Tên sách"
+                    }
+                }
+            },
+            "BookResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "$ref": "#/components/schemas/Book"
+                            }
+                        }
+                    }
+                ]
+            },
+            "BooksListResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/SuccessResponse"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Book"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
