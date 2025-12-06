@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
   successResponse,
   errorResponse,
@@ -21,7 +22,7 @@ export async function GET(req: Request) {
       20
     );
 
-    const where: any = {};
+    const where: Prisma.TopicWhereInput = {};
 
     if (gradeIdParam) {
       const gradeId = Number(gradeIdParam);
@@ -39,7 +40,7 @@ export async function GET(req: Request) {
     }
 
     if (search) {
-      where.name = { contains: search, mode: "insensitive" };
+      where.name = { contains: search };
     }
 
     const [topics, total] = await Promise.all([

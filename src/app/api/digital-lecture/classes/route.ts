@@ -6,9 +6,10 @@ import { successResponse, errorResponse } from "@/lib/apiResponse";
 // Trả về danh sách lớp kèm subjects, topicCount, bookCount
 export async function GET() {
   try {
-    // Lấy tất cả grades
+    // Lấy tất cả grades với schoolLevel
     const grades = await prisma.grade.findMany({
-      orderBy: { name: "asc" },
+      include: { schoolLevel: true },
+      orderBy: { gradeName: "asc" },
     });
 
     // Với mỗi grade, lấy thông tin subjects, topicCount, bookCount
@@ -39,7 +40,7 @@ export async function GET() {
           if (!subjectMap.has(topic.subject.id)) {
             subjectMap.set(topic.subject.id, {
               subjectId: topic.subject.id.toString(),
-              subjectName: topic.subject.name,
+              subjectName: topic.subject.subjectName,
             });
           }
         });
@@ -48,7 +49,9 @@ export async function GET() {
 
         return {
           id: grade.id,
-          name: grade.name,
+          name: grade.gradeName,
+          image: grade.image,
+          schoolLevel: grade.schoolLevel.levelName,
           subject,
           topicCount,
           bookCount,

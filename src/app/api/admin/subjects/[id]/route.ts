@@ -63,7 +63,7 @@ export async function PUT(
     return NextResponse.json(
       successResponse(updated, "Cập nhật môn học thành công", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/admin/subjects/[id] error:", error);
     return NextResponse.json(
       errorResponse("Không cập nhật được môn học", 500),
@@ -90,7 +90,7 @@ export async function DELETE(
     return NextResponse.json(
       successResponse(null, "Đã xoá môn học", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/admin/subjects/[id] error:", error);
     return NextResponse.json(
       errorResponse(

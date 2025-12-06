@@ -63,7 +63,7 @@ export async function PUT(
     return NextResponse.json(
       successResponse(updated, "Cập nhật sách thành công", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/admin/books/[id] error:", error);
     return NextResponse.json(
       errorResponse("Không cập nhật được sách", 500),
@@ -90,7 +90,7 @@ export async function DELETE(
     return NextResponse.json(
       successResponse(null, "Đã xoá sách", 200, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/admin/books/[id] error:", error);
     return NextResponse.json(
       errorResponse(
