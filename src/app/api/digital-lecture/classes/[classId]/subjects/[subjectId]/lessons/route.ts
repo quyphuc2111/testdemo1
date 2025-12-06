@@ -75,6 +75,7 @@ export async function GET(
             className: lesson.grade.gradeName,
             subjectId: lesson.subjectId,
             subjectName: lesson.subject.subjectName,
+            lectureOnlineLink: lesson.lectureUrl, // Thêm lectureOnlineLink để hiển thị badge
         }));
 
         const pagination = createPaginationMeta(page, limit, total);

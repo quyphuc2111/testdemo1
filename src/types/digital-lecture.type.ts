@@ -71,6 +71,7 @@ export interface LectureLesson {
     className: string;
     subjectId: number;
     subjectName: string;
+    lectureOnlineLink: string | null;
 }
 
 /**

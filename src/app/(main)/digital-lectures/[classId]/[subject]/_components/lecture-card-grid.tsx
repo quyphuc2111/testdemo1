@@ -41,13 +41,12 @@ const LectureCardGrid = ({ lessons }: LectureCardGridProps) => {
                             />
 
                             {/* Online Content Badge */}
-                            {false && (
-                                <div className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[#E2F0CB] shadow-[0_2px_10px_rgba(0,0,0,0.05)] flex items-center gap-1.5">
+                            {lesson.lectureOnlineLink && (
+                                <div className="absolute top-3 right-3 z-10 bg-white  px-3 py-1.5 rounded-full border border-[#E2F0CB]  flex items-center gap-1.5">
                                     <div className="relative flex items-center justify-center">
                                         <div className="absolute inset-0 bg-[#B5EAD7] rounded-full blur-[2px] opacity-50" />
                                         <PlayCircle size={14} fill="#B5EAD7" className="text-[#004C70] relative z-10" />
                                     </div>
-                                    <span className="text-[10px] font-extrabold text-[#004C70] tracking-wide uppercase">Bài giảng</span>
                                 </div>
                             )}
 

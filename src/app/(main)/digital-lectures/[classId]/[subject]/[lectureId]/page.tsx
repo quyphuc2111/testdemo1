@@ -61,9 +61,9 @@ const LectureDetailPage = () => {
                 </div>
 
                 {/* Main Content Area */}
-                <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-[32px] border-2 border-[#E2F0CB] ">
+                <div className="bg-white  border-2 border-[#E2F0CB] ">
                     {/* Video/Webview Container */}
-                    <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-black/5 overflow-hidden">
+                    <div className="relative w-full   bg-black/5 overflow-hidden">
                         {/* Mobile: Taller container for landscape content, Desktop: Standard aspect-video */}
                         <div className="relative w-full aspect-video sm:aspect-video md:aspect-video min-h-[300px] sm:min-h-0">
                             {isLoading ? (
@@ -79,8 +79,8 @@ const LectureDetailPage = () => {
                             ) : !lecture ? (
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <LectureEmptyComponent
-                                        title="Không tìm thấy bài giảng"
-                                        description="Bài giảng không tồn tại hoặc đã bị xóa"
+                                        title="Bài giảng được được cập nhật"
+                                        description="Bài giảng này được được cập nhật"
                                     />
                                 </div>
                             ) : lecture.lectureOnlineLink ? (
@@ -100,8 +100,8 @@ const LectureDetailPage = () => {
                             ) : (
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <LectureEmptyComponent
-                                        title="Chưa có liên kết bài giảng"
-                                        description="Bài giảng này chưa có nội dung trực tuyến"
+                                        title="Bài giảng được được cập nhật"
+                                        description="Bài giảng này được được cập nhật"
                                     />
                                 </div>
                             )}
