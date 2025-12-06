@@ -101,13 +101,13 @@ const ExamCategoryTree = ({
   };
 
   const renderCategory = (category: Category, level: number = 0) => {
-    // Only render up to level 1 (Topic), not level 2 (Lesson)
-    if (level > 1) {
+    // Only render level 0 (Books)
+    if (level > 0) {
       return null;
     }
 
-    const hasChildren =
-      category.children && category.children.length > 0 && level < 1;
+    const hasChildren = false; // Disable children rendering
+
     const isExpanded = expandedCategories.has(category.id);
     const isSelected = selectedCategory === category.id;
     const isBook = level === 0;

@@ -33,9 +33,7 @@ const ExamCardGrid = ({ lessons }: ExamCardGridProps) => {
       {lessons.map((lesson, index) => (
         <Link
           key={lesson.id}
-          href={`/digital-learning-exam/${encodeURIComponent(
-            classId
-          )}/${encodeURIComponent(subjectId)}/${lesson.id}`}
+          href={`/digital-learning-exam/${classId}/${subjectId}/${lesson.id}`}
           className="block h-full"
         >
           <motion.div

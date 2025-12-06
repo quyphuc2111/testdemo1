@@ -6,6 +6,7 @@ import {
   getSubjectsForClass,
   MOCK_DB_DATA,
   getCategoriesBySubject,
+  getTopics,
 } from "../_data/mock-data";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -28,7 +29,7 @@ export default function ClassPage({
   // const heroAccent = isTieuHoc ? "#EC4899" : "#3B82F6"; // Unused
 
   return (
-    <div className="min-h-screen pt-24 bg-white relative">
+    <div className="min-h-screen pt-20 bg-white relative">
       {/* Main Content */}
       <div
         style={{ backgroundImage: 'url("/images/subjects/bg_subject.png")' }}
@@ -82,9 +83,7 @@ export default function ClassPage({
               return (
                 <Link
                   key={subject.id}
-                  href={`/digital-learning-exam/${encodeURIComponent(
-                    classId
-                  )}/${encodeURIComponent(subject.id)}`}
+                  href={`/digital-learning-exam/${classId}/${subject.id}`}
                   className="block h-full"
                 >
                   <div
@@ -115,8 +114,10 @@ export default function ClassPage({
                           {getCategoriesBySubject(subject.id, classId).length}{" "}
                           bộ sách
                         </span>
-                        {/* <span className="mx-2">•</span> */}
-                        {/* <span>{getCategoriesBySubject(subject.id).reduce((acc, cat) => acc + (cat.children?.length || 0), 0)} chủ đề</span> */}
+                        <span className="mx-2">•</span>
+                        <span>
+                          {getTopics(classId, subject.id).length} chủ đề
+                        </span>
                       </div>
                     </div>
                     {/* Right Arrow */}

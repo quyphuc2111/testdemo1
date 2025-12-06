@@ -1,229 +1,118 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
-import useEmblaCarousel from "embla-carousel-react";
 
-const carouselItems: Array<{
+const featureItems: Array<{
   image: string;
   title: string;
+  description: string;
   bgColor: string;
   borderColor: string;
+  delay: number;
 }> = [
-    {
-      image: "/images/virtual-class.png",
-      title: "Hệ thống LMS",
-      bgColor: "#FFEED8",
-      borderColor: "#FFDEA8",
-    },
-    {
-      image: "/images/information.png",
-      title: "Diễn đàn",
-      bgColor: "#E8F1FF",
-      borderColor: "#DAEBFF",
-    },
-    {
-      image: "/images/arcade-machine.png",
-      title: "Chơi mà học",
-      bgColor: "#EBDAFF",
-      borderColor: "#DFC6FF",
-    },
-    {
-      image: "/images/meta.png",
-      title: "STEM",
-      bgColor: "#FFECF2",
-      borderColor: "#FFD8E8",
-    },
-    {
-      image: "/images/mindmap.png",
-      title: "Mindmap",
-      bgColor: "#ADFFFE",
-      borderColor: "#7DF5F5",
-    },
-  ];
+  {
+    image: "/images/virtual-class.png",
+    title: "Hệ thống LMS",
+    description: "Quản lý học tập toàn diện",
+    bgColor: "bg-[#FFEED8]",
+    borderColor: "border-[#FFDEA8]",
+    delay: 0.1,
+  },
+  {
+    image: "/images/information.png",
+    title: "Diễn đàn",
+    description: "Trao đổi tri thức đa chiều",
+    bgColor: "bg-[#E8F1FF]",
+    borderColor: "border-[#DAEBFF]",
+    delay: 0.2,
+  },
+  {
+    image: "/images/arcade-machine.png",
+    title: "Chơi mà học",
+    description: "Hứng thú trong từng bài giảng",
+    bgColor: "bg-[#EBDAFF]",
+    borderColor: "border-[#DFC6FF]",
+    delay: 0.3,
+  },
+  {
+    image: "/images/meta.png",
+    title: "STEM",
+    description: "Khơi nguồn sáng tạo khoa học",
+    bgColor: "bg-[#FFECF2]",
+    borderColor: "border-[#FFD8E8]",
+    delay: 0.4,
+  },
+  {
+    image: "/images/mindmap.png",
+    title: "Mindmap",
+    description: "Tư duy logic và sáng tạo",
+    bgColor: "bg-[#ADFFFE]",
+    borderColor: "border-[#7DF5F5]",
+    delay: 0.5,
+  },
+];
 
 const CarouselFeatures = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    loop: false,
-    dragFree: false,
-    align: "start",
-    slidesToScroll: 1,
-  });
-
-  useEffect(() => {
-    if (!emblaApi) return;
-
-    const onSelect = () => {
-      setSelectedIndex(emblaApi.selectedScrollSnap());
-    };
-
-    setScrollSnaps(emblaApi.scrollSnapList());
-    emblaApi.on("select", onSelect);
-    emblaApi.reInit();
-
-    return () => {
-      emblaApi.off("select", onSelect);
-    };
-  }, [emblaApi]);
-
-  const handlePrev = () => {
-    if (!emblaApi) return;
-    emblaApi.scrollPrev();
-  };
-
-  const handleNext = () => {
-    if (!emblaApi) return;
-    emblaApi.scrollNext();
-  };
-
   return (
-    <motion.div className="h-[600px] flex flex-col items-center">
-      <motion.h1
-        className="font-normal text-[48px] text-center mt-20"
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        SẢN PHẨM CỦA BKT EDU
-      </motion.h1>
+    <section className="py-20 xl:py-28 relative overflow-hidden snap-start min-h-screen flex items-center justify-center">
+      {/* Background Decorations */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
+        <div className="absolute top-1/2 left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 mix-blend-multiply animate-blob"></div>
+        <div className="absolute top-1/2 right-10 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-50 mix-blend-multiply animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-10 left-1/3 w-64 h-64 bg-pink-100 rounded-full blur-3xl opacity-50 mix-blend-multiply animate-blob animation-delay-4000"></div>
+      </div>
 
-      {/* carousel */}
-      <div className="relative w-max h-max mt-11">
+      <div className="container mx-auto px-4 md:px-8 xl:px-20 flex flex-col items-center">
         <motion.div
-          className="absolute -top-5 -left-16 transform -translate-y-1/2"
-          initial={{ x: -100, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
         >
-          <Image
-            src="/images/xanh-icon-1.svg"
-            alt="icon"
-            width={100}
-            height={100}
-          />
-        </motion.div>
-        <motion.div
-          className="absolute -bottom-20 -right-10 transform"
-          initial={{ x: 100, opacity: 0 }}
-          whileInView={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <Image
-            src="/images/xanh-icon-2.svg"
-            alt="icon"
-            width={100}
-            height={100}
-          />
+          <h2 className="text-[#FFA726] font-bold tracking-wider text-sm md:text-base uppercase mb-2">
+            Hệ sinh thái giáo dục
+          </h2>
+          <h1 className="font-bold text-3xl md:text-5xl text-[#004C70]">
+            SẢN PHẨM CỦA BKT EDU
+          </h1>
         </motion.div>
 
-        <div className="w-full max-w-[1380px] px-7 2xl:px-10">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
-              {carouselItems.map((item, index) => {
-                return (
-                  <motion.div
-                    key={index}
-                    className="min-w-[280px] max-w-[280px] h-[285px] flex flex-col gap-y-5 items-center justify-center rounded-3xl shrink-0"
-                    style={{
-                      backgroundColor: item.bgColor,
-                      border: `1px solid ${item.borderColor}`,
-                    }}
-                    initial={{ opacity: 0, y: 100 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
-                    transition={{
-                      duration: 0.5,
-                    }}
-                  >
-                    <motion.div
-                      className="transition-all duration-300 transform"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Image
-                        src={item.image}
-                        alt={item.title}
-                        width={150}
-                        height={150}
-                      />
-                    </motion.div>
-                    <motion.p
-                      className="text-center text-[24px] font-normal"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      {item.title}
-                    </motion.p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Controls dưới: prev (trái) - dots (giữa) - next (phải) */}
-        <div className="flex items-center justify-center gap-6 mt-8">
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Previous"
-            className="flex items-center hover:cursor-pointer justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-600 bg-white hover:bg-gray-100 transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 xl:gap-8 w-full">
+          {featureItems.map((item, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: item.delay }}
+              whileHover={{ y: -10, scale: 1.02 }}
+              className={`relative group p-6 rounded-4xl border ${item.borderColor} ${item.bgColor} flex flex-col items-center text-center gap-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer`}
             >
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
-          </button>
+              <div className="relative w-28 h-28 md:w-32 md:h-32 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3">
+                <Image
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  className="object-contain drop-shadow-md"
+                />
+              </div>
 
-          <div className="flex items-center gap-2">
-            {scrollSnaps.map((_, index) => (
-              <button
-                key={index}
-                type="button"
-                onClick={() => emblaApi && emblaApi.scrollTo(index)}
-                className={`h-2.5 rounded-full transition-all duration-300 ${selectedIndex === index
-                  ? "w-6 bg-[#FFA726]"
-                  : "w-2.5 bg-gray-300"
-                  }`}
-              />
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Next"
-            className="flex items-center hover:cursor-pointer justify-center w-10 h-10 rounded-full border border-gray-300 text-gray-600 bg-white hover:bg-gray-100 transition"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M9 18l6-6-6-6" />
-            </svg>
-          </button>
+              <div className="flex flex-col gap-2 relative z-10 w-full">
+                <h3 className="text-xl font-bold text-slate-800 group-hover:text-[#004C70] transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-slate-600 font-medium transform translate-y-1 group-hover:translate-y-0 transition-all duration-300 w-full">
+                  {item.description}
+                </p>
+              </div>
+              <div className="absolute inset-0 rounded-4xl bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300 pointer-events-none"></div>
+            </motion.div>
+          ))}
         </div>
       </div>
-    </motion.div>
+    </section>
   );
 };
 

@@ -2,46 +2,84 @@
 
 import { motion } from "motion/react";
 import TypingEffect from "@/components/animations/typing-effect";
-import BannerTopContentRight from "./banner-top-content-right";
 
 const BannerTop = () => {
   return (
-    <div
-      className="w-full h-[1075px] relative bg-cover bg-no-repeat "
-      style={{ backgroundImage: "url('/images/banner-top.svg')" }}
-    >
-      {/* Title */}
-      <section className="flex flex-col gap-y-14 w-[550px] absolute left-[5%] 2xl:left-[15%] top-1/2 -translate-y-1/2 ">
-        <motion.h1
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="text-left text-[48px] font-semibold text-[#004C70]"
-        >
-          <TypingEffect
-            text="HỆ THỐNG BKT LMS"
-            speed={100}
-            typingDelay={500}
-            className="text-[32px] xl:text-[36px] 2xl:text-[48px] font-semibold"
-          />
-        </motion.h1>
+    <div className="relative w-full min-h-[90vh] lg:h-screen flex items-center bg-[#E0F7FA] overflow-hidden snap-start">
+      {/* Background Graphic */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-multiply"
+        style={{ backgroundImage: "url('/images/banner-top.svg')" }}
+      />
 
-        <motion.p
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="text-justify w-[430px] 2xl:w-[650px] text-[18px] xl:text-[20px] 2xl:text-[24px] text-[#004C70]"
-        >
-          Được xây dựng và phát triển bởi công ty Cổ Phần Đầu tư Thương Mại và
-          công nghệ BKT. Nguồn học liệu số và các chức năng tiện ích trên
-          website sẽ giúp người quản lý, nhà trường thuận tiện trong việc kiểm
-          tra, đánh giá chất lượng an toàn trường học và giúp giáo viên, học
-          sinh thuận tiện trong quá trình triển khai chương trình dạy học.
-        </motion.p>
-      </section>
+      <div className="container mx-auto px-4 md:px-8 xl:px-20 relative z-10 grid gap-12 items-center h-full pt-20">
+        <div className="flex flex-col items-start gap-8 order-2 lg:order-1">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="bg-white/70 backdrop-blur-xl border border-white/60 p-8 md:p-12 rounded-4xl shadow-2xl relative overflow-hidden group"
+          >
+            {/* Shine effect */}
+            <div className="absolute top-0 -left-full w-1/2 h-full bg-linear-to-r from-transparent via-white/50 to-transparent skew-x-12 group-hover:animate-shine" />
 
-      {/* Content right */}
-      <BannerTopContentRight />
+            <h1 className="text-4xl md:text-5xl xl:text-6xl font-extrabold text-[#004C70] mb-6 leading-tight">
+              <TypingEffect
+                text="HỆ THỐNG BKT LMS"
+                speed={100}
+                typingDelay={500}
+                className="bg-clip-text text-transparent bg-linear-to-r from-[#004C70] to-[#0083C9]"
+              />
+            </h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1, duration: 1 }}
+              className="text-lg md:text-xl text-slate-700 leading-relaxed mb-8 text-justify"
+            >
+              Nền tảng giáo dục số toàn diện, kiến tạo tương lai. Kết nối nhà
+              trường, giáo viên và học sinh trong một hệ sinh thái học tập thông
+              minh, an toàn và sáng tạo.
+            </motion.p>
+
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() =>
+                  window.scrollTo({
+                    top: window.innerHeight,
+                    behavior: "smooth",
+                  })
+                }
+                className="px-8 py-4 bg-linear-to-r from-[#FFA726] to-[#FB8C00] text-white font-bold rounded-full shadow-lg hover:shadow-orange-300/50 hover:scale-105 transition-all duration-300 flex items-center gap-2"
+              >
+                <span>Khám phá ngay</span>
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  ></path>
+                </svg>
+              </button>
+              <a
+                href="https://zalo.me/0337218868"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-4 bg-white text-[#004C70] font-bold rounded-full shadow-md hover:bg-gray-50 hover:scale-105 transition-all duration-300 border border-[#004C70]/20"
+              >
+                Liên hệ tư vấn
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 };

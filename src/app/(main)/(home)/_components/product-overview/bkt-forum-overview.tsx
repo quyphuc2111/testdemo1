@@ -9,61 +9,64 @@ type BKTForumOverviewProps = {
 
 const BKTForumOverview: React.FC<BKTForumOverviewProps> = (props) => {
   return (
-    <motion.div className="w-max h-max flex items-center gap-x-8 xl:gap-x-10 2xl:gap-x-24">
-      <div className="rounded-xl overflow-hidden">
-        <motion.div
-          className="rounded-xl w-[549px] h-[300px] 2xl:w-[896px] 2xl:h-[490px] "
-          initial={{ opacity: 0, x: 100 }} // Start with opacity 0 and slide from right
-          whileInView={{ opacity: 1, x: 0 }} // Fade in and slide to original position
-          transition={{
-            duration: 0.8,
-            delay: 0.5, // Delay to sync with the list items
-            ease: "easeOut", // Smooth easing
-          }}
-        >
+    <motion.div className="w-full flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+      <motion.div
+        className="flex-1 w-full max-w-lg lg:max-w-xl order-1"
+        initial={{ opacity: 0, x: -50 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+      >
+        <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white/50">
           <Image
             src="/images/forum.jpg"
             alt="BKT Forum"
-            width={896}
-            height={490}
-            className="rounded-xl w-full h-full object-cover"
+            fill
+            className="object-cover hover:scale-105 transition-transform duration-700"
           />
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
 
-      <section>
+      <section className="flex-1 order-2">
         <motion.h1
-          className="font-semibold text-[24px] xl:text-[28px]  2xl:text-[36px]"
-          initial={{ opacity: 0, y: 50 }} // Start with opacity 0 and slightly below
-          whileInView={{ opacity: 1, y: 0 }} // Fade in and slide up to position
-          transition={{ duration: 0.8, delay: 0.2 }} // Smooth transition with slight delay
+          className="font-bold text-3xl md:text-4xl text-[#004C70] mb-6"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
         >
           BKT FORUM
         </motion.h1>
 
         <motion.ul
-          className="flex flex-col gap-y-5 mt-4"
-          initial={{ opacity: 0 }} // Start with opacity 0
-          whileInView={{ opacity: 1 }} // Fade in when it enters the viewport
-          transition={{
-            duration: 1,
-            delay: 0.5, // Delay to ensure smooth appearance after title
-          }}
+          className="flex flex-col gap-y-6"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.3 }}
         >
           {props.forumListFeatures.map((feature, index) => (
             <motion.li
               key={index}
-              className="flex items-center gap-x-2"
-              initial={{ opacity: 0, x: -100 }} // Start with opacity 0 and off to the left
-              whileInView={{ opacity: 1, x: 0 }} // Slide in from the left with fade-in effect
+              className="flex items-center gap-x-4"
+              initial={{ opacity: 0, x: 50 }} // Slide from right
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
               transition={{
-                duration: 0.6,
-                delay: index * 0.1, // Staggered delay for each list item
-                ease: [0.25, 0.1, 0.25, 1], // Easing for a smooth effect
+                duration: 0.5,
+                delay: index * 0.1,
               }}
             >
-              <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
-              <span className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
+              <div className="w-12 h-12 relative shrink-0">
+                <Image
+                  src="/images/gif/gif-12.gif"
+                  fill
+                  alt="feature-icon"
+                  className="object-contain"
+                  unoptimized
+                />
+              </div>
+              <span className="text-lg md:text-xl text-slate-700 font-medium">
                 {feature.title}
               </span>
             </motion.li>

@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import Image from "next/image";
 
 type MindMapOverviewProps = {
@@ -9,77 +9,74 @@ type MindMapOverviewProps = {
 
 const MindMapOverview: React.FC<MindMapOverviewProps> = (props) => {
   return (
-    <div
-      className="w-full h-[630px] xl:h-[720px] 2xl:h-[1080px] flex items-center justify-center bg-no-repeat bg-contain"
-      style={{ backgroundImage: "url('/images/Mindmap.svg')" }}
-    >
-      <motion.div
-        className="w-full h-full flex justify-center gap-x-14 xl:gap-x-24 2xl:gap-x-64 xl:mt-40"
-        initial={{ opacity: 0 }} // Ban đầu ẩn
-        whileInView={{ opacity: 1 }} // Khi vào viewport sẽ xuất hiện
-        transition={{ duration: 1, ease: "easeInOut" }} // Thời gian và easing
-      >
-        <section>
-          <motion.h1
-            className="font-semibold text-[24px] xl:text-[28px]  2xl:text-[36px]"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
+    <div className="w-full bg-slate-50 py-20 xl:py-32">
+      <div className="container mx-auto px-4 md:px-8 xl:px-20 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        {/* Content Left */}
+        <motion.section
+          className="order-2 lg:order-1"
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h1 className="font-bold text-3xl md:text-5xl text-[#004C70] mb-8">
             Mindmap
-          </motion.h1>
+          </h1>
 
           <motion.ul
-            className="flex flex-col gap-y-5 mt-4"
+            className="flex flex-col gap-y-6"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
           >
             {props.mindMapFeatures.map((feature, index) => (
               <motion.li
                 key={index}
-                className="flex items-center gap-x-2"
-                initial={{ opacity: 0, x: -100 }}
+                className="flex items-center gap-x-4"
+                initial={{ opacity: 0, x: -50 }} // Slide from left
                 whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
                 transition={{
-                  duration: 0.7,
+                  duration: 0.5,
                   delay: index * 0.1,
-                  ease: [0.25, 0.1, 0.25, 1],
                 }}
               >
-                <Image src="/images/gif/gif-12.gif" width={50} height={50} alt="feature-icon" unoptimized />
-                <span className="text-[20px] xl:text-[22px] 2xl:text-[34px] font-normal">
+                <div className="w-12 h-12 relative shrink-0">
+                  <Image
+                    src="/images/gif/gif-12.gif"
+                    fill
+                    alt="feature-icon"
+                    className="object-contain"
+                    unoptimized
+                  />
+                </div>
+                <span className="text-lg md:text-xl text-slate-700 font-medium">
                   {feature.title}
                 </span>
               </motion.li>
             ))}
           </motion.ul>
-        </section>
+        </motion.section>
 
-        <AnimatePresence>
-          <div className="rounded-xl overflow-hidden">
-            <motion.div
-              className="rounded-xl 2xl:w-[680px] 2xl:h-[350px] xl:w-[600px] w-[500px] xl:h-[310px] h-[260px]"
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 100 }}
-              transition={{
-                duration: 0.7,
-                ease: "easeOut",
-                delay: 0.5,
-              }}
-            >
-              <Image
-                src="/images/mindmap-1.svg"
-                alt="Mindmap"
-                width={680}
-                height={350}
-                className="rounded-xl w-full h-full object-cover"
-              />
-            </motion.div>
+        {/* Image Right */}
+        <motion.div
+          className="w-full order-1 lg:order-2"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <div className="relative aspect-4/3 rounded-3xl overflow-hidden shadow-2xl border-4 border-cyan-50">
+            <Image
+              src="/images/mindmap-1.svg"
+              alt="Mindmap"
+              fill
+              className="object-cover"
+            />
           </div>
-        </AnimatePresence>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };
