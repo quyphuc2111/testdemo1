@@ -4,15 +4,56 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { navList } from "@/contants/header-nav-list";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, User, LogOut } from "lucide-react";
 
 const HeaderGlobalComponent = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const isHome = pathname === "/";
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+
+  const handleNavClick = (e: React.MouseEvent, url: string) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      setIsMobileMenuOpen(false);
+      router.push(`/login?returnUrl=${encodeURIComponent(url)}`);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch("https://accountbackend.bkt.net.vn/api/Moodle/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } catch (e) {
+      console.error("Logout failed", e);
+    } finally {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("username");
+      }
+      setIsLoggedIn(false);
+      setUsername("");
+      setIsUserDropdownOpen(false);
+      setIsMobileMenuOpen(false);
+      router.push("/");
+      router.refresh();
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true");
+      setUsername(localStorage.getItem("username") || "Học viên");
+    }
+  }, [pathname]); // Re-check on navigation
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,6 +124,7 @@ const HeaderGlobalComponent = () => {
               >
                 <Link
                   href={navItem.link}
+                  onClick={(e) => handleNavClick(e, navItem.link)}
                   className={`text-[15px] font-semibold tracking-wide transition-colors duration-300 ${
                     isScrolled || !isHome
                       ? "text-slate-700 hover:text-[#004C70]"
@@ -101,15 +143,55 @@ const HeaderGlobalComponent = () => {
             ))}
           </ul>
 
-          <Link href={navList[navList.length - 1].link}>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className={`px-8 py-3 rounded-full font-bold text-white shadow-xl transition-all duration-300 bg-linear-to-r from-[#FFA726] to-[#FF9100] shadow-orange-200`}
+          {isLoggedIn ? (
+            <div className="relative">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full font-bold text-slate-700 bg-white shadow-lg border border-slate-100 ring-4 ring-transparent hover:ring-[#E4F5FC] transition-all duration-300`}
+              >
+                <div className="p-1 rounded-full bg-[#E4F5FC] text-[#004C70]">
+                  <User size={20} />
+                </div>
+                <span className="max-w-[100px] truncate">{username}</span>
+              </motion.button>
+
+              <AnimatePresence>
+                {isUserDropdownOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 top-full mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden py-1"
+                  >
+                    <button
+                      onClick={handleLogout}
+                      className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                    >
+                      <LogOut size={16} />
+                      Đăng xuất
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <Link
+              href={navList[navList.length - 1].link}
+              onClick={(e) =>
+                handleNavClick(e, navList[navList.length - 1].link)
+              }
             >
-              {navList[navList.length - 1].title}
-            </motion.button>
-          </Link>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className={`px-8 py-3 rounded-full font-bold text-white shadow-xl transition-all duration-300 bg-linear-to-r from-[#FFA726] to-[#FF9100] shadow-orange-200`}
+              >
+                {navList[navList.length - 1].title}
+              </motion.button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -152,14 +234,29 @@ const HeaderGlobalComponent = () => {
                     className="w-full max-w-xs md:max-w-md"
                   >
                     {index === navList.length - 1 ? (
-                      <Link href={navItem.link} className="block w-full">
-                        <button className="w-full py-4 rounded-xl bg-linear-to-r from-[#FFA726] to-[#FF9100] text-white font-bold text-lg shadow-xl shadow-orange-200">
-                          {navItem.title}
+                      isLoggedIn ? (
+                        <button
+                          onClick={handleLogout}
+                          className="w-full py-4 rounded-xl bg-red-500 text-white font-bold text-lg shadow-xl shadow-red-200 flex items-center justify-center gap-2"
+                        >
+                          <LogOut size={20} />
+                          Đăng xuất ({username})
                         </button>
-                      </Link>
+                      ) : (
+                        <Link
+                          href={navItem.link}
+                          className="block w-full"
+                          onClick={(e) => handleNavClick(e, navItem.link)}
+                        >
+                          <button className="w-full py-4 rounded-xl bg-linear-to-r from-[#FFA726] to-[#FF9100] text-white font-bold text-lg shadow-xl shadow-orange-200">
+                            {navItem.title}
+                          </button>
+                        </Link>
+                      )
                     ) : (
                       <Link
                         href={navItem.link}
+                        onClick={(e) => handleNavClick(e, navItem.link)}
                         className="flex items-center justify-between w-full p-4 rounded-xl bg-slate-50 hover:bg-[#E0F7FA] text-slate-700 hover:text-[#004C70] font-bold text-lg transition-all duration-300 group"
                       >
                         {navItem.title}

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import { useForm } from "react-hook-form";
@@ -25,7 +25,10 @@ const formSchema = z.object({
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get("returnUrl");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,11 +40,38 @@ export default function LoginPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(values);
-    setIsLoading(false);
-    router.push("/");
+    setError(null);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Đăng nhập thất bại");
+      }
+
+      // Save login state for UI checks
+      if (typeof window !== "undefined") {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", values.username);
+      }
+
+      router.push(returnUrl || "/");
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -123,6 +153,11 @@ export default function LoginPage() {
             )}
           </div>
 
+          {error && (
+            <div className="p-3 text-sm text-red-500 bg-red-50 rounded-lg border border-red-200">
+              {error}
+            </div>
+          )}
           <Button
             type="submit"
             className="w-full h-12 text-base font-semibold text-white shadow-lg transition-all bg-linear-to-r from-[#004C70] to-[#006696] hover:from-[#003855] hover:to-[#004C70] shadow-[#004C70]/20 hover:shadow-[#004C70]/40 rounded-xl"
