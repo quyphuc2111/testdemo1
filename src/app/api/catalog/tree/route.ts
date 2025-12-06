@@ -135,10 +135,10 @@ export async function GET() {
     });
 
     return NextResponse.json({ status: "ok", tree });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/catalog/tree error:", error);
     return NextResponse.json(
-      { status: "error", message: error?.message ?? "Unknown error" },
+      { status: "error", message: (error as Error).message ?? "Unknown error" },
       { status: 500 }
     );
   }

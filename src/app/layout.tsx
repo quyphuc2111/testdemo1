@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import TanstackQueryProvider from "./providers/tanstack-query-provider";
 
 const pfBeauSans = localFont({
   src: [
@@ -92,7 +93,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={pfBeauSans.variable}>
       <body className="antialiased font-sans">
-        {children}
+        <TanstackQueryProvider>
+          {children}
+        </TanstackQueryProvider>
       </body>
     </html>
   );

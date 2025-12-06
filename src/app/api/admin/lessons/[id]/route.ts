@@ -53,7 +53,7 @@ export async function PUT(
     });
 
     return NextResponse.json(successResponse(updated, "Cập nhật bài học thành công", 200, null));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/admin/lessons/[id] error:", error);
     return NextResponse.json(errorResponse("Không cập nhật được bài học", 500), { status: 500 });
   }
@@ -72,7 +72,7 @@ export async function DELETE(
   try {
     await prisma.lesson.delete({ where: { id } });
     return NextResponse.json(successResponse(null, "Đã xoá bài học", 200, null));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/admin/lessons/[id] error:", error);
     return NextResponse.json(errorResponse("Không xoá được bài học", 400), { status: 400 });
   }

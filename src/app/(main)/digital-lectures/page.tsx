@@ -116,7 +116,7 @@ const DigitalLecturesPage = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 shadow-sm"
+                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 "
                                 >
                                     <div className="h-1.5 w-full bg-[#FBCFE8]" />
                                     {/* Banner Image */}
@@ -213,7 +213,7 @@ const DigitalLecturesPage = () => {
                                     initial={{ opacity: 0, y: 20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 shadow-sm"
+                                    className="bg-white rounded-2xl overflow-hidden h-full flex flex-col transition-colors border border-gray-200 "
                                 >
                                     <div className="h-1.5 w-full bg-[#BFDBFE]" />
                                     {/* Banner Image */}
