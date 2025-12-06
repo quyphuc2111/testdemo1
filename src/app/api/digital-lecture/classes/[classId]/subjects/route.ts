@@ -30,21 +30,27 @@ export async function GET(
             );
         }
 
-        // Lấy tất cả topics của grade này
+        // Lấy tất cả topics của grade này với lesson count
         const allTopics = await prisma.topic.findMany({
             where: { gradeId: classId },
             include: {
                 subject: true,
                 book: true,
+                _count: {
+                    select: {
+                        lessons: true,
+                    },
+                },
             },
         });
 
-        // Group topics theo subject để tính bookCount và topicCount
+        // Group topics theo subject để tính bookCount, topicCount, và lessonCount
         const subjectMap = new Map<number, {
             id: string;
             name: string;
             bookCount: number;
             topicCount: number;
+            lessonCount: number;
         }>();
 
         allTopics.forEach((topic) => {
@@ -56,11 +62,13 @@ export async function GET(
                     name: topic.subject.subjectName,
                     bookCount: 0,
                     topicCount: 0,
+                    lessonCount: 0,
                 });
             }
 
             const subjectData = subjectMap.get(subjectId)!;
             subjectData.topicCount++;
+            subjectData.lessonCount += topic._count.lessons;
         });
 
         // Tính bookCount cho từng subject (distinct books)
