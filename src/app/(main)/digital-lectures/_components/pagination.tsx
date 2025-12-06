@@ -179,7 +179,7 @@ const Pagination = ({
 
         {/* Page Numbers - Mobile */}
         <div className="flex sm:hidden items-center gap-1.5">
-          {getPageNumbers(true).map((page, index) => {
+          {getPageNumbers(true).map((page) => {
             const pageNum = page as number;
             const isActive = pageNum === currentPage;
 
