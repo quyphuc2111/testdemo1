@@ -1,0 +1,87 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//
+// ========== USER ==========
+//
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     String @default("teacher")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//
+// ========== CATALOG ==========
+//
+
+model Grade {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  topics  Topic[]
+  lessons Lesson[]
+}
+
+model Subject {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  topics  Topic[]
+  lessons Lesson[]
+}
+
+model Book {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+
+  topics  Topic[]
+  lessons Lesson[]
+}
+
+model Topic {
+  id    Int    @id @default(autoincrement())
+  name  String
+
+  gradeId   Int
+  subjectId Int
+  bookId    Int
+
+  grade   Grade   @relation(fields: [gradeId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+  book    Book    @relation(fields: [bookId], references: [id])
+
+  lessons Lesson[]
+
+  @@unique([name, gradeId, subjectId, bookId])
+}
+
+model Lesson {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  gradeId   Int
+  subjectId Int
+  bookId    Int
+  topicId   Int
+
+  lectureUrl String?
+
+  grade   Grade   @relation(fields: [gradeId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+  book    Book    @relation(fields: [bookId], references: [id])
+  topic   Topic   @relation(fields: [topicId], references: [id])
+
+  @@unique([name, topicId])
+}
