@@ -15,8 +15,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Vui lòng nhập địa chỉ email hợp lệ.",
+  username: z.string().min(1, {
+    message: "Vui lòng nhập tên tài khoản hoặc email.",
   }),
   password: z.string().min(6, {
     message: "Mật khẩu phải có ít nhất 6 ký tự.",
@@ -30,7 +30,7 @@ export default function LoginPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -80,21 +80,21 @@ export default function LoginPage() {
 
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="email" className="font-medium text-slate-600">
-              Tên tài khoản / email
+            <Label htmlFor="username" className="font-medium text-slate-600">
+              Tên tài khoản / Email
             </Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="name@example.com"
-              {...form.register("email")}
+              id="username"
+              type="text"
+              placeholder="Tên tài khoản hoặc email"
+              {...form.register("username")}
               className={`h-11 bg-white/50 border-slate-200 transition-all ${
-                form.formState.errors.email ? "border-red-500" : ""
+                form.formState.errors.username ? "border-red-500" : ""
               }`}
             />
-            {form.formState.errors.email && (
+            {form.formState.errors.username && (
               <p className="text-sm text-red-500">
-                {form.formState.errors.email.message}
+                {form.formState.errors.username.message}
               </p>
             )}
           </div>

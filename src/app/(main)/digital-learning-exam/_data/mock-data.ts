@@ -445,3 +445,100 @@ export const getSubjectsForClass = (
       name: s,
     }));
 };
+
+// --- Added functions to fix page.tsx errors ---
+
+export interface CategoryNode {
+  id: string | number;
+  name: string;
+  children?: CategoryNode[];
+}
+
+export interface GridLesson {
+  id: string | number;
+  title: string;
+  topic: string;
+  book: string;
+  duration: string;
+  views: number;
+  thumbnail: string;
+  link_online?: string;
+  type?: string;
+}
+
+export const getCategoriesBySubject = (
+  subjectId: string,
+  classId: string
+): CategoryNode[] => {
+  const topics = parseLearningData(MOCK_DB_DATA);
+  const filteredTopics = topics.filter(
+    (t) => t.class === classId && t.subject === subjectId
+  );
+
+  // Group by Book
+  const booksMap = new Map<string, CategoryNode[]>();
+  filteredTopics.forEach((topic) => {
+    const bookName = topic.book || "Chưa phân loại";
+    if (!booksMap.has(bookName)) {
+      booksMap.set(bookName, []);
+    }
+    booksMap.get(bookName)?.push({
+      id: topic.id,
+      name: topic.name,
+      children: [],
+    });
+  });
+
+  return Array.from(booksMap.entries()).map(
+    ([bookName, topicsList], index) => ({
+      id: `book-${index}`,
+      name: bookName,
+      children: topicsList,
+    })
+  );
+};
+
+export const getLessons = (
+  classId: string,
+  subjectId: string
+): GridLesson[] => {
+  const topics = parseLearningData(MOCK_DB_DATA);
+  const filteredTopics = topics.filter(
+    (t) => t.class === classId && t.subject === subjectId
+  );
+
+  const lessons: GridLesson[] = [];
+  filteredTopics.forEach((topic) => {
+    topic.lessons.forEach((l) => {
+      lessons.push({
+        id: l.id,
+        title: l.name,
+        topic: topic.name,
+        book: topic.book || "Chưa phân loại",
+        duration: "15:00", // Mock
+        views: 120, // Mock
+        thumbnail: "/images/lectures/image_lecture.png",
+        link_online: l.url || undefined,
+        type: l.type,
+      });
+    });
+  });
+  return lessons;
+};
+
+export const getSubjectsByClass = (className: string) =>
+  getSubjectsForClass(MOCK_DB_DATA, className);
+
+export const mockClasses = getUniqueClasses(MOCK_DB_DATA).map((c) => {
+  const classNum = parseInt(c.name.replace(/\D/g, "")) || 1;
+  return {
+    ...c,
+    level:
+      c.level === "primary"
+        ? "Tiểu học"
+        : c.level === "secondary"
+        ? "THCS"
+        : "THPT",
+    thumbnail: `/images/class/class_${classNum}.png`,
+  };
+});
