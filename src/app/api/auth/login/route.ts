@@ -4,9 +4,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { username, password } = body;
-    // Default to strict BKT cloud URL if not provided.
-    // Use "https://cloud.bkt.net.vn" as default.
-    const nextcloudUrl = body.nextcloudUrl || "https://cloud.bkt.net.vn";
 
     if (!username || !password) {
       return NextResponse.json(
@@ -25,86 +22,10 @@ export async function POST(req: NextRequest) {
       }
     );
 
-    // 2. Call Forum Login API (XenForo)
-    const forumLoginPromise = (async () => {
-      try {
-        // Step A: Get Login Page to fetch cookies and CSRF token
-        const loginPageUrl = "https://forum.bkt.net.vn/login/";
-        const getRes = await fetch(loginPageUrl, {
-          method: "GET",
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          },
-        });
-
-        const html = await getRes.text();
-
-        // Extract _xfToken using regex
-        const tokenMatch = html.match(/name="_xfToken" value="([^"]+)"/);
-        const xfToken = tokenMatch ? tokenMatch[1] : null;
-
-        if (!xfToken) {
-          console.error("Could not find _xfToken on forum login page");
-          return {
-            success: false,
-            message: "Forum token not found",
-            status: 500,
-          };
-        }
-
-        // Get cookies from initial response
-        let initialCookies: string[] = [];
-        if (
-          "getSetCookie" in getRes.headers &&
-          typeof getRes.headers.getSetCookie === "function"
-        ) {
-          initialCookies = getRes.headers.getSetCookie();
-        } else {
-          const raw = getRes.headers.get("set-cookie");
-          if (raw) initialCookies = [raw];
-        }
-
-        // Step B: POST Login
-        const params = new URLSearchParams();
-        params.append("login", username);
-        params.append("password", password);
-        params.append("remember", "1");
-        params.append("_xfToken", xfToken);
-        params.append("_xfRedirect", "https://forum.bkt.net.vn/");
-
-        const postRes = await fetch("https://forum.bkt.net.vn/login/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent":
-              "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            Cookie: initialCookies.join("; "),
-          },
-          body: params,
-          redirect: "manual", // Important to capture 303
-        });
-
-        return {
-          res: postRes,
-          success:
-            postRes.status === 303 ||
-            postRes.status === 302 ||
-            postRes.status === 200,
-        };
-      } catch (error) {
-        console.error("Forum login error:", error);
-        return { success: false, error };
-      }
-    })();
-
-    // 3. Call Nextcloud Login API
+    // 2. Call Nextcloud Login API
     const nextcloudLoginPromise = (async () => {
-      if (!nextcloudUrl) return { success: false, message: "No Nextcloud URL" };
-
       try {
-        // Normalize URL - remove trailing slash
-        const baseUrl = nextcloudUrl.replace(/\/+$/, "");
+        const baseUrl = "https://forum.bkt.net.vn/";
         const authHeader =
           "Basic " + Buffer.from(`${username}:${password}`).toString("base64");
         const endpoint = `${baseUrl}/ocs/v2.php/cloud/user?format=json`;
@@ -121,13 +42,16 @@ export async function POST(req: NextRequest) {
         });
 
         const responseText = await response.text();
+        console.log("Nextcloud response status:", response.status);
+        console.log("Nextcloud response:", responseText.substring(0, 200));
 
         if (response.status === 200 || response.status === 207) {
           let userData = {};
           try {
             const data = JSON.parse(responseText);
             userData = data.ocs?.data || data;
-          } catch {
+          } catch (e) {
+            console.error("Failed to parse Nextcloud response:", e);
             userData = { authenticated: true };
           }
           return {
@@ -137,10 +61,19 @@ export async function POST(req: NextRequest) {
           };
         }
 
+        // Check if it's an authentication error
+        if (response.status === 401) {
+          return {
+            success: false,
+            status: response.status,
+            message: "Nextcloud authentication failed - invalid credentials",
+          };
+        }
+
         return {
           success: false,
           status: response.status,
-          message: responseText.substring(0, 100),
+          message: `Nextcloud error: ${responseText.substring(0, 100)}`,
         };
       } catch (error) {
         console.error("Nextcloud login error:", error);
@@ -148,10 +81,19 @@ export async function POST(req: NextRequest) {
       }
     })();
 
+    // 3. Forum Login - Skipped (endpoint not accessible)
+    const forumLoginPromise = Promise.resolve({
+      success: false,
+      message: "Forum login skipped - endpoint not found",
+      status: 404,
+    });
+
     // Wait for all three
-    const [moodleRes, forumResWrapper, nextcloudResWrapper] = await Promise.all(
-      [moodleLoginPromise, forumLoginPromise, nextcloudLoginPromise]
-    );
+    const [moodleRes, nextcloudResWrapper, forumResWrapper] = await Promise.all([
+      moodleLoginPromise,
+      nextcloudLoginPromise,
+      forumLoginPromise,
+    ]);
 
     // Handle Moodle Response
     let moodleData = null;
@@ -172,8 +114,8 @@ export async function POST(req: NextRequest) {
       user?: any;
     };
 
-    const forumResult = forumResWrapper as ResultType;
     const nextcloudResult = nextcloudResWrapper as ResultType;
+    const forumResult = forumResWrapper as ResultType;
 
     const success = moodleData?.success || false;
 
@@ -186,14 +128,15 @@ export async function POST(req: NextRequest) {
         success: moodleData?.success,
         message: moodleData?.message,
       },
-      forum: {
-        success: forumResult.success,
-        status: forumResult.status,
-      },
       nextcloud: {
         success: nextcloudResult.success,
         user: nextcloudResult.user,
         message: nextcloudResult.message,
+      },
+      forum: {
+        success: forumResult.success,
+        status: forumResult.status,
+        message: forumResult.message,
       },
     };
 
@@ -203,9 +146,12 @@ export async function POST(req: NextRequest) {
       // Usually auth endpoint returns 401 if the *main* auth fails.
     });
 
-    // Merge Cookies
-    const copyCookies = (sourceRes: Response | undefined) => {
-      if (!sourceRes) return;
+    // Merge Cookies from backend services
+    const copyCookies = (sourceRes: Response | undefined, serviceName: string) => {
+      if (!sourceRes) {
+        console.log(`No response from ${serviceName} to copy cookies`);
+        return;
+      }
 
       let cookies: string[] = [];
       if (
@@ -218,14 +164,44 @@ export async function POST(req: NextRequest) {
         if (raw) cookies = [raw];
       }
 
-      cookies.forEach((cookieStr) => {
-        response.headers.append("Set-Cookie", cookieStr);
+      console.log(`Cookies from ${serviceName}:`, cookies.length, "cookies found");
+
+      cookies.forEach((cookieStr, index) => {
+        // Skip cookies with __Host- prefix (they have strict requirements)
+        const cookieName = cookieStr.split("=")[0];
+        if (cookieName.startsWith("__Host-")) {
+          console.log(`Skipping ${serviceName} cookie ${index}: ${cookieName} (has __Host- prefix)`);
+          return;
+        }
+
+        // Parse cookie to modify domain
+        const parts = cookieStr.split(";").map((part) => part.trim());
+        const filteredParts = parts.filter((part) => {
+          const lowerPart = part.toLowerCase();
+          // Remove existing domain restrictions and SameSite for cross-domain
+          return !lowerPart.startsWith("domain=") && 
+                 !lowerPart.startsWith("samesite=");
+        });
+        
+        // Add domain=.bkt.net.vn and SameSite=None for cross-domain
+        filteredParts.push("Domain=.bkt.net.vn");
+        filteredParts.push("SameSite=None");
+        
+        // Ensure Secure flag is present (required for SameSite=None)
+        if (!filteredParts.some(p => p.toLowerCase() === "secure")) {
+          filteredParts.push("Secure");
+        }
+        
+        const modifiedCookie = filteredParts.join("; ");
+
+        console.log(`Setting ${serviceName} cookie ${index}: ${cookieName}`);
+        response.headers.append("Set-Cookie", modifiedCookie);
       });
     };
 
-    copyCookies(moodleRes);
-    if (forumResult.res) copyCookies(forumResult.res);
-    if (nextcloudResult.res) copyCookies(nextcloudResult.res);
+    copyCookies(moodleRes, "Moodle");
+    if (nextcloudResult.res) copyCookies(nextcloudResult.res, "Nextcloud");
+    if (forumResult.res) copyCookies(forumResult.res, "Forum");
 
     return response;
   } catch (error: unknown) {

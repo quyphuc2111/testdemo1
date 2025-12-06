@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +23,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const returnUrl = searchParams.get("returnUrl");
@@ -39,29 +39,83 @@ export default function LoginPage() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    // Prevent double submission
+    if (isLoading) {
+      console.log("Already submitting, ignoring...");
+      return;
+    }
+    
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
+      console.log("Submitting login form...");
+      
+      // Đăng nhập đồng thời Moodle và Nextcloud
+      const [moodleResponse, nextcloudResponse] = await Promise.all([
+        // 1. Đăng nhập Moodle
+        fetch("https://accountbackend.bkt.net.vn/api/Moodle/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            username: values.username,
+            password: values.password,
+          }),
+        }),
+        
+        // 2. Đăng nhập Nextcloud (Forum) qua API route
+        fetch("/api/auth/nextcloud", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            username: values.username,
+            password: values.password,
+          }),
+        }),
+      ]);
 
-      const data = await response.json();
+      console.log("Moodle response status:", moodleResponse.status);
+      console.log("Nextcloud response status:", nextcloudResponse.status);
 
-      if (!response.ok || !data.success) {
-        throw new Error(data.message || "Đăng nhập thất bại");
+      const [moodleData, nextcloudData] = await Promise.all([
+        moodleResponse.json(),
+        nextcloudResponse.json(),
+      ]);
+      
+      console.log("Moodle data:", moodleData);
+      console.log("Nextcloud data:", nextcloudData);
+
+      // Kiểm tra kết quả đăng nhập Moodle (chính)
+      if (!moodleResponse.ok || !moodleData.success) {
+        throw new Error(moodleData.message || "Đăng nhập thất bại");
       }
 
+      // Log kết quả Nextcloud (không bắt buộc phải thành công)
+      if (nextcloudResponse.ok && nextcloudData.success) {
+        console.log("Nextcloud login successful");
+        
+        // Lưu Nextcloud cookies vào localStorage để dùng cho các request sau
+        if (nextcloudData.cookies && typeof window !== "undefined") {
+          localStorage.setItem("nextcloud_cookies", JSON.stringify(nextcloudData.cookies));
+          console.log("Saved Nextcloud cookies to localStorage:", Object.keys(nextcloudData.cookies));
+        }
+      } else {
+        console.warn("Nextcloud login failed, but continuing...");
+      }
+
+      console.log("Login successful, saving to localStorage...");
       // Save login state for UI checks
       if (typeof window !== "undefined") {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("username", values.username);
       }
 
+      console.log("Redirecting to:", returnUrl || "/");
       router.push(returnUrl || "/");
     } catch (err: unknown) {
       if (err instanceof Error) {
@@ -175,5 +229,19 @@ export default function LoginPage() {
         </form>
       </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center w-full min-h-screen bg-linear-to-br from-[#E4F5FC] to-[#AFE2F6]">
+        <div className="flex gap-2 items-center">
+          <div className="w-8 h-8 rounded-full border-4 border-[#004C70] animate-spin border-t-transparent" />
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }
