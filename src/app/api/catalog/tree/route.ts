@@ -135,10 +135,11 @@ export async function GET() {
     });
 
     return NextResponse.json({ status: "ok", tree });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("GET /api/catalog/tree error:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json(
-      { status: "error", message: error?.message ?? "Unknown error" },
+      { status: "error", message: errorMessage },
       { status: 500 }
     );
   }

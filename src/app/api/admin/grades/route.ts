@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
   successResponse,
   errorResponse,
@@ -18,12 +19,11 @@ export async function GET(req: Request) {
       20
     );
 
-    const where: any = {};
+    const where: Prisma.GradeWhereInput = {};
 
     if (search) {
       where.name = {
         contains: search,
-        mode: "insensitive",
       };
     }
 
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       successResponse(grade, "Tạo lớp thành công", 201, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("POST /api/admin/grades error:", error);
     return NextResponse.json(
       errorResponse("Không tạo được lớp", 500),

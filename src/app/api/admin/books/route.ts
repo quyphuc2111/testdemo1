@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import {
   successResponse,
   errorResponse,
@@ -18,9 +19,9 @@ export async function GET(req: Request) {
       20
     );
 
-    const where: any = {};
+    const where: Prisma.BookWhereInput = {};
     if (search) {
-      where.name = { contains: search, mode: "insensitive" };
+      where.name = { contains: search };
     }
 
     const [books, total] = await Promise.all([
@@ -63,7 +64,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       successResponse(book, "Tạo sách thành công", 201, null)
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("POST /api/admin/books error:", error);
     return NextResponse.json(
       errorResponse("Không tạo được sách", 500),

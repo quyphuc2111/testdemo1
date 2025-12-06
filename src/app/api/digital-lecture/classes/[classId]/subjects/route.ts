@@ -42,7 +42,7 @@ export async function GET(
         // Map sang format { id, name }
         const subjects = topics.map((topic) => ({
             id: topic.subject.id.toString(),
-            name: topic.subject.name,
+            name: topic.subject.subjectName,
         }));
 
         // Loại bỏ duplicates (nếu có)

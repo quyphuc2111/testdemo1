@@ -54,7 +54,7 @@ export async function PUT(
     });
 
     return NextResponse.json(successResponse(updated, "Cập nhật chủ đề thành công", 200, null));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PUT /api/admin/topics/[id] error:", error);
     return NextResponse.json(errorResponse("Không cập nhật được chủ đề", 500), { status: 500 });
   }
@@ -73,7 +73,7 @@ export async function DELETE(
   try {
     await prisma.topic.delete({ where: { id } });
     return NextResponse.json(successResponse(null, "Đã xoá chủ đề", 200, null));
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("DELETE /api/admin/topics/[id] error:", error);
     return NextResponse.json(
       errorResponse("Không xoá được chủ đề (có thể còn bài học tham chiếu)", 400),

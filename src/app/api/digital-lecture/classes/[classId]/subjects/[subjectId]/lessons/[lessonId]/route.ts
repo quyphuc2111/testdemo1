@@ -53,16 +53,16 @@ export async function GET(
         // Map sang format theo spec
         const data = {
             id: lesson.id,
-            title: lesson.name, // spec yêu cầu "title"
+            title: lesson.lessonName, // spec yêu cầu "title"
             topicId: lesson.topicId,
-            topic: lesson.topic.name,
+            topic: lesson.topic.topicName,
             bookId: lesson.bookId,
-            book: lesson.book.name,
+            book: lesson.book.bookName,
             lectureOnlineLink: lesson.lectureUrl, // spec yêu cầu "lectureOnlineLink"
             classId: lesson.gradeId,
-            className: lesson.grade.name,
+            className: lesson.grade.gradeName,
             subjectId: lesson.subjectId,
-            subjectName: lesson.subject.name,
+            subjectName: lesson.subject.subjectName,
         };
 
         return NextResponse.json(

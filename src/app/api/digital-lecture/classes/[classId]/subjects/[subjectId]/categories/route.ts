@@ -54,14 +54,14 @@ export async function GET(
             if (!bookMap.has(topic.bookId)) {
                 bookMap.set(topic.bookId, {
                     id: topic.bookId,
-                    book: topic.book.name,
+                    book: topic.book.bookName,
                     children: [],
                 });
             }
 
             bookMap.get(topic.bookId)!.children.push({
                 id: topic.id,
-                name: topic.name,
+                name: topic.topicName,
             });
         });
 
