@@ -6,7 +6,8 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import { useForm } from "react-hook-form";
-import { FaGoogle, FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
+import Image from "next/image";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -61,10 +62,17 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="p-6 w-full max-w-md bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/50"
       >
-        <div className="mb-8 text-center">
+        <div className="flex flex-col items-center mb-8 text-center">
           <h1 className="mb-2 text-3xl font-bold sm:text-4xl text-[#004C70]">
             Welcome Back!
           </h1>
+          <Image
+            src="/images/gif/Hacker.gif"
+            alt="Logo"
+            width={100}
+            height={100}
+            unoptimized
+          />
           <p className="text-sm text-slate-500 sm:text-base">
             Đăng nhập để truy cập hệ thống BKT LMS
           </p>
@@ -96,12 +104,6 @@ export default function LoginPage() {
               <Label htmlFor="password" className="font-medium text-slate-600">
                 Mật khẩu
               </Label>
-              <Link
-                href="/forgot-password"
-                className="text-sm font-medium text-[#004C70] hover:underline"
-              >
-                Quên mật khẩu?
-              </Link>
             </div>
             <Input
               id="password"
@@ -136,34 +138,6 @@ export default function LoginPage() {
             )}
           </Button>
         </form>
-
-        <div className="relative my-8">
-          <div className="flex absolute inset-0 items-center">
-            <span className="w-full border-t border-slate-200" />
-          </div>
-          <div className="flex relative justify-center text-xs uppercase">
-            <span className="px-4 backdrop-blur-xl text-slate-400 bg-white/0">
-              Hoặc đăng nhập với
-            </span>
-          </div>
-        </div>
-
-        <div className="flex gap-4">
-          <Button className="w-full h-11 bg-gray-200 border-2 transition-all border-slate-300 text-slate-700 hover:bg-gray-300">
-            <FaGoogle className="mr-2 w-4 h-4 text-red-500" />
-            Google
-          </Button>
-        </div>
-
-        <p className="mt-8 text-sm text-center text-slate-600">
-          Bạn chưa có tài khoản?{" "}
-          <Link
-            href="/register"
-            className="font-bold text-[#004C70] hover:underline"
-          >
-            Đăng ký ngay
-          </Link>
-        </p>
       </motion.div>
     </div>
   );
