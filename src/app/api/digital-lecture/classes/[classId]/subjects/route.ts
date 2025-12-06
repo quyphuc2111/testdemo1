@@ -30,28 +30,60 @@ export async function GET(
             );
         }
 
-        // Lấy tất cả topics của grade này để lấy distinct subjects
-        const topics = await prisma.topic.findMany({
+        // Lấy tất cả topics của grade này
+        const allTopics = await prisma.topic.findMany({
             where: { gradeId: classId },
             include: {
                 subject: true,
+                book: true,
             },
-            distinct: ["subjectId"],
         });
 
-        // Map sang format { id, name }
-        const subjects = topics.map((topic) => ({
-            id: topic.subject.id.toString(),
-            name: topic.subject.subjectName,
-        }));
+        // Group topics theo subject để tính bookCount và topicCount
+        const subjectMap = new Map<number, {
+            id: string;
+            name: string;
+            bookCount: number;
+            topicCount: number;
+        }>();
 
-        // Loại bỏ duplicates (nếu có)
-        const uniqueSubjects = Array.from(
-            new Map(subjects.map((s) => [s.id, s])).values()
-        );
+        allTopics.forEach((topic) => {
+            const subjectId = topic.subject.id;
+
+            if (!subjectMap.has(subjectId)) {
+                subjectMap.set(subjectId, {
+                    id: subjectId.toString(),
+                    name: topic.subject.subjectName,
+                    bookCount: 0,
+                    topicCount: 0,
+                });
+            }
+
+            const subjectData = subjectMap.get(subjectId)!;
+            subjectData.topicCount++;
+        });
+
+        // Tính bookCount cho từng subject (distinct books)
+        const subjectBookMap = new Map<number, Set<number>>();
+        allTopics.forEach((topic) => {
+            if (!subjectBookMap.has(topic.subjectId)) {
+                subjectBookMap.set(topic.subjectId, new Set());
+            }
+            subjectBookMap.get(topic.subjectId)!.add(topic.bookId);
+        });
+
+        // Cập nhật bookCount
+        subjectBookMap.forEach((bookIds, subjectId) => {
+            const subjectData = subjectMap.get(subjectId);
+            if (subjectData) {
+                subjectData.bookCount = bookIds.size;
+            }
+        });
+
+        const subjects = Array.from(subjectMap.values());
 
         return NextResponse.json(
-            successResponse(uniqueSubjects, "Success", 200, null)
+            successResponse(subjects, "Success", 200, null)
         );
     } catch (error) {
         console.error("GET /api/digital-lecture/classes/[classId]/subjects error:", error);
