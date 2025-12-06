@@ -24,7 +24,7 @@ export async function GET() {
                 id: 'asc',
             },
         });
-        return NextResponse.json(schoolLevels);
+        return NextResponse.json({ data: schoolLevels });
     } catch (error) {
         console.error('Error fetching school levels:', error);
         return NextResponse.json(
