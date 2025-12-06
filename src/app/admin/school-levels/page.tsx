@@ -24,8 +24,8 @@ const SchoolLevelsPage = () => {
     const fetchSchoolLevels = async () => {
         try {
             const response = await fetch('/api/admin/school-levels');
-            const data = await response.json();
-            setSchoolLevels(data);
+            const result = await response.json();
+            setSchoolLevels(result.data || []);
         } catch (error) {
             console.error('Error fetching school levels:', error);
         } finally {

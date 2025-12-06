@@ -14,6 +14,17 @@ interface ImportStats {
     errors: string[];
 }
 
+interface ImportTopicsLessonsStats {
+    grades: number;
+    subjects: number;
+    books: number;
+    topicsCreated: number;
+    topicsUpdated: number;
+    lessonsCreated: number;
+    lessonsUpdated: number;
+    errors: string[];
+}
+
 const ImportExcelPage = () => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
@@ -23,10 +34,26 @@ const ImportExcelPage = () => {
         stats?: ImportStats;
     } | null>(null);
 
+    // State for topics/lessons import
+    const [topicsFile, setTopicsFile] = useState<File | null>(null);
+    const [uploadingTopics, setUploadingTopics] = useState(false);
+    const [topicsResult, setTopicsResult] = useState<{
+        success: boolean;
+        message: string;
+        stats?: ImportTopicsLessonsStats;
+    } | null>(null);
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setFile(e.target.files[0]);
             setResult(null);
+        }
+    };
+
+    const handleTopicsFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setTopicsFile(e.target.files[0]);
+            setTopicsResult(null);
         }
     };
 
@@ -67,6 +94,46 @@ const ImportExcelPage = () => {
             });
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handleTopicsUpload = async () => {
+        if (!topicsFile) return;
+
+        setUploadingTopics(true);
+        setTopicsResult(null);
+
+        try {
+            const formData = new FormData();
+            formData.append('file', topicsFile);
+
+            const response = await fetch('/api/admin/import-topics-lessons', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setTopicsResult({
+                    success: true,
+                    message: data.message,
+                    stats: data.stats,
+                });
+                setTopicsFile(null);
+            } else {
+                setTopicsResult({
+                    success: false,
+                    message: data.error || 'Có lỗi xảy ra',
+                });
+            }
+        } catch (error) {
+            setTopicsResult({
+                success: false,
+                message: 'Không thể kết nối đến server',
+            });
+        } finally {
+            setUploadingTopics(false);
         }
     };
 
@@ -158,9 +225,9 @@ const ImportExcelPage = () => {
                     {/* Result */}
                     {result && (
                         <div
-                            className={`bg-white/10 backdrop-blur-lg border rounded-2xl p-6 ${result.success
-                                    ? 'border-green-500/50'
-                                    : 'border-red-500/50'
+                            className={`bg-white/10 backdrop-blur-lg border rounded-2xl p-6 mb-6 ${result.success
+                                ? 'border-green-500/50'
+                                : 'border-red-500/50'
                                 }`}
                         >
                             <div className="flex items-center gap-3 mb-4">
@@ -226,6 +293,157 @@ const ImportExcelPage = () => {
                                             </h5>
                                             <ul className="text-red-200 text-sm space-y-1 max-h-40 overflow-y-auto">
                                                 {result.stats.errors.map((error, index) => (
+                                                    <li key={index}>• {error}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Topics & Lessons Import Section */}
+                    <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-8 mb-6">
+                        <h2 className="text-2xl font-bold text-white mb-4">Import Chủ Đề & Bài Học</h2>
+
+                        {/* Format Guide */}
+                        <div className="bg-purple-500/10 border border-purple-500/20 rounded-xl p-4 mb-6">
+                            <h3 className="text-purple-300 font-semibold mb-2">📋 Định dạng file Excel:</h3>
+                            <ul className="text-gray-300 text-sm space-y-1">
+                                <li>• <strong>class</strong>: Lớp (VD: Lớp 1, Lớp 6) - <span className="text-red-300">Bắt buộc</span></li>
+                                <li>• <strong>subject</strong>: Môn học (VD: Toán, Văn) - Tùy chọn</li>
+                                <li>• <strong>book</strong>: Sách (VD: Kết nối tri thức) - <span className="text-red-300">Bắt buộc</span></li>
+                                <li>• <strong>topic_name</strong>: Tên chủ đề - <span className="text-red-300">Bắt buộc</span></li>
+                                <li>• <strong>lesson_name</strong>: Tên bài học - <span className="text-red-300">Bắt buộc</span></li>
+                            </ul>
+                            <div className="mt-3 text-yellow-300 text-sm">
+                                ⚠️ Lưu ý: File này chỉ dùng để thêm/cập nhật topic_name và lesson_name cho dữ liệu đã có
+                            </div>
+                        </div>
+
+                        {/* File Input */}
+                        <div className="mb-6">
+                            <label className="block text-gray-300 mb-3 font-medium">
+                                Chọn file Excel (.xlsx, .xls)
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="file"
+                                    accept=".xlsx,.xls"
+                                    onChange={handleTopicsFileChange}
+                                    className="hidden"
+                                    id="topics-excel-file"
+                                />
+                                <label
+                                    htmlFor="topics-excel-file"
+                                    className="flex items-center justify-center gap-3 px-6 py-4 bg-white/10 border-2 border-dashed border-white/30 rounded-xl cursor-pointer hover:bg-white/20 hover:border-white/50 transition-all duration-300"
+                                >
+                                    <Upload className="w-6 h-6 text-purple-400" />
+                                    <span className="text-white">
+                                        {topicsFile ? topicsFile.name : 'Click để chọn file'}
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* Upload Button */}
+                        <button
+                            onClick={handleTopicsUpload}
+                            disabled={!topicsFile || uploadingTopics}
+                            className="w-full px-6 py-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            {uploadingTopics ? (
+                                <>
+                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                    Đang xử lý...
+                                </>
+                            ) : (
+                                <>
+                                    <Upload className="w-5 h-5" />
+                                    Import Chủ Đề & Bài Học
+                                </>
+                            )}
+                        </button>
+                    </div>
+
+                    {/* Topics/Lessons Result */}
+                    {topicsResult && (
+                        <div
+                            className={`bg-white/10 backdrop-blur-lg border rounded-2xl p-6 ${topicsResult.success
+                                ? 'border-green-500/50'
+                                : 'border-red-500/50'
+                                }`}
+                        >
+                            <div className="flex items-center gap-3 mb-4">
+                                {topicsResult.success ? (
+                                    <CheckCircle className="w-8 h-8 text-green-400" />
+                                ) : (
+                                    <XCircle className="w-8 h-8 text-red-400" />
+                                )}
+                                <h3
+                                    className={`text-xl font-bold ${topicsResult.success ? 'text-green-300' : 'text-red-300'
+                                        }`}
+                                >
+                                    {topicsResult.message}
+                                </h3>
+                            </div>
+
+                            {topicsResult.stats && (
+                                <div className="space-y-2">
+                                    <h4 className="text-white font-semibold mb-3">Thống kê:</h4>
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Khối lớp</div>
+                                            <div className="text-white text-2xl font-bold">
+                                                {topicsResult.stats.grades}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Môn học</div>
+                                            <div className="text-white text-2xl font-bold">
+                                                {topicsResult.stats.subjects}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Sách</div>
+                                            <div className="text-white text-2xl font-bold">
+                                                {topicsResult.stats.books}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Chủ đề mới</div>
+                                            <div className="text-green-400 text-2xl font-bold">
+                                                {topicsResult.stats.topicsCreated}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Chủ đề cập nhật</div>
+                                            <div className="text-blue-400 text-2xl font-bold">
+                                                {topicsResult.stats.topicsUpdated}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Bài học mới</div>
+                                            <div className="text-green-400 text-2xl font-bold">
+                                                {topicsResult.stats.lessonsCreated}
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 rounded-lg p-3">
+                                            <div className="text-gray-400 text-sm">Bài học cập nhật</div>
+                                            <div className="text-blue-400 text-2xl font-bold">
+                                                {topicsResult.stats.lessonsUpdated}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {topicsResult.stats.errors.length > 0 && (
+                                        <div className="mt-4 bg-red-500/10 border border-red-500/20 rounded-lg p-4">
+                                            <h5 className="text-red-300 font-semibold mb-2">
+                                                Lỗi ({topicsResult.stats.errors.length}):
+                                            </h5>
+                                            <ul className="text-red-200 text-sm space-y-1 max-h-40 overflow-y-auto">
+                                                {topicsResult.stats.errors.map((error, index) => (
                                                     <li key={index}>• {error}</li>
                                                 ))}
                                             </ul>
