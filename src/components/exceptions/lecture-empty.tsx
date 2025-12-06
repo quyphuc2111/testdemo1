@@ -43,27 +43,27 @@ const LectureEmptyComponent = ({
             </div>
 
             {/* Main Content */}
-            <div className="max-w-[1440px] mx-auto px-4 xl:px-8 2xl:px-12 py-12 relative z-10">
-                <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-8 2xl:px-12 py-6 sm:py-8 md:py-10 lg:py-12 relative z-10">
+                <div className="flex flex-col items-center justify-center min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px]">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="flex flex-col items-center gap-8 max-w-lg text-center"
+                        className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 max-w-lg text-center w-full px-2"
                     >
                         {/* Flat Empty Icon */}
                         <div className="relative">
-                            <div className="w-24 h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-xl flex items-center justify-center">
-                                <FileQuestion className="w-12 h-12 text-[#EC4899]" />
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-lg sm:rounded-xl flex items-center justify-center">
+                                <FileQuestion className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#EC4899]" />
                             </div>
                         </div>
 
                         {/* Empty Message */}
-                        <div className="space-y-3">
-                            <h3 className="text-[32px] md:text-[36px] font-bold text-[#004C70]">
+                        <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
+                            <h3 className="text-xl sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-[36px] font-bold text-[#004C70] leading-tight">
                                 {title}
                             </h3>
-                            <p className="text-[18px] text-gray-600 font-medium">
+                            <p className="text-sm sm:text-base md:text-[16px] lg:text-[18px] text-gray-600 font-medium">
                                 {description}
                             </p>
                         </div>

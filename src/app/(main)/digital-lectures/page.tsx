@@ -80,7 +80,7 @@ const DigitalLecturesPage = () => {
     ], [elementaryClasses, middleSchoolClasses]);
 
     return (
-        <div className="min-h-screen bg-white pt-24 relative">
+        <div className="min-h-screen bg-white pt-20 relative">
             {/* Banner Section */}
             <BannerSection />
 

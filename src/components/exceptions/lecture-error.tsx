@@ -49,43 +49,40 @@ const LectureErrorComponent = ({ onRetry }: LectureErrorComponentProps) => {
             </div>
 
             {/* Main Content */}
-            <div className="max-w-[1440px] mx-auto px-4 xl:px-8 2xl:px-12 py-12 relative z-10">
-                <div className="flex flex-col items-center justify-center min-h-[400px]">
+            <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-8 2xl:px-12 py-6 sm:py-8 md:py-10 lg:py-12 relative z-10">
+                <div className="flex flex-col items-center justify-center min-h-[250px] sm:min-h-[300px] md:min-h-[350px] lg:min-h-[400px]">
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="flex flex-col items-center gap-8 max-w-lg text-center"
+                        className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8 max-w-lg text-center w-full px-2"
                     >
                         {/* Flat Error Icon */}
-                        <div className="w-24 h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-xl flex items-center justify-center">
-                            <AlertCircle className="w-12 h-12 text-[#EC4899]" />
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-[#FEF3F8] border-2 border-[#EC4899] rounded-lg sm:rounded-xl flex items-center justify-center">
+                            <AlertCircle className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-[#EC4899]" />
                         </div>
 
                         {/* Error Message */}
-                        <div className="space-y-3">
-                            <h3 className="text-[32px] md:text-[36px] font-bold text-[#004C70]">
+                        <div className="space-y-2 sm:space-y-2.5 md:space-y-3">
+                            <h3 className="text-xl sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-[36px] font-bold text-[#004C70] leading-tight">
                                 Đã xảy ra lỗi
                             </h3>
-                            <p className="text-[18px] text-gray-600 font-medium">
+                            <p className="text-sm sm:text-base md:text-[16px] lg:text-[18px] text-gray-600 font-medium">
                                 Không thể tải dữ liệu
                             </p>
-                            <p className="text-[16px] text-gray-500">
+                            <p className="text-xs sm:text-sm md:text-[16px] text-gray-500">
                                 Vui lòng kiểm tra kết nối mạng và thử lại
                             </p>
                         </div>
 
                         {/* Flat Retry Button */}
                         <motion.button
-
                             onClick={handleRetry}
-                            className=" hover:cursor-pointer flex items-center gap-3 px-8 py-4 bg-[#EC4899] text-white rounded-xl font-bold text-[16px] border-2 border-[#EC4899] hover:bg-[#DB2777] hover:border-[#DB2777] transition-all"
+                            className="hover:cursor-pointer flex items-center gap-2 sm:gap-2.5 md:gap-3 px-6 sm:px-7 md:px-8 py-3 sm:py-3.5 md:py-4 bg-[#EC4899] text-white rounded-lg sm:rounded-xl font-bold text-sm sm:text-base md:text-[16px] border-2 border-[#EC4899] hover:bg-[#DB2777] hover:border-[#DB2777] transition-all w-full sm:w-auto"
                         >
-                            <RefreshCw className="w-5 h-5" />
+                            <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5 md:w-5 md:h-5" />
                             <span>Thử lại</span>
                         </motion.button>
-
-
                     </motion.div>
                 </div>
             </div>

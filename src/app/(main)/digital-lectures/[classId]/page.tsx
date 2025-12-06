@@ -22,7 +22,7 @@ const SubjectListPage = () => {
   const heroBorder = isPrimarySchool ? "#FBCFE8" : "#BFDBFE";
 
   return (
-    <div className="min-h-screen pt-24 bg-white relative">
+    <div className="min-h-screen pt-20 bg-white relative">
       {/* Main Content */}
       <div
         style={{ backgroundImage: 'url("/images/subjects/bg_subject.png")' }}

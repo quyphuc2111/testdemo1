@@ -25,7 +25,7 @@ const LectureDetailPage = () => {
     return (
         <div
             style={{ backgroundImage: 'url("/images/lectures/bg_lectures.png")', backgroundSize: "cover", backgroundPosition: "center" }}
-            className="min-h-screen pt-20 sm:pt-28 md:pt-32 lg:pt-36 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-8 pb-6 sm:pb-8 md:pb-10"
+            className="min-h-screen  pt-28 px-3 sm:px-4 md:px-6 lg:px-8 xl:px-8 pb-6 sm:pb-8 md:pb-10"
         >
             <div className="max-w-[1280px] mx-auto">
                 {/* Header Navigation */}
@@ -61,42 +61,51 @@ const LectureDetailPage = () => {
                 </div>
 
                 {/* Main Content Area */}
-                <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-[32px] border-2 border-[#E2F0CB] p-2 sm:p-3 md:p-4 lg:p-6">
+                <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-[32px] border-2 border-[#E2F0CB] ">
                     {/* Video/Webview Container */}
-                    <div className="relative w-full aspect-video rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black/5">
-                        {isLoading ? (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <LectureLoadingComponent />
-                            </div>
-                        ) : isError ? (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <LectureErrorComponent
-                                    onRetry={() => refetch()}
+                    <div className="relative w-full rounded-xl sm:rounded-2xl md:rounded-3xl bg-black/5 overflow-hidden">
+                        {/* Mobile: Taller container for landscape content, Desktop: Standard aspect-video */}
+                        <div className="relative w-full aspect-video sm:aspect-video md:aspect-video min-h-[300px] sm:min-h-0">
+                            {isLoading ? (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <LectureLoadingComponent />
+                                </div>
+                            ) : isError ? (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <LectureErrorComponent
+                                        onRetry={() => refetch()}
+                                    />
+                                </div>
+                            ) : !lecture ? (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <LectureEmptyComponent
+                                        title="Không tìm thấy bài giảng"
+                                        description="Bài giảng không tồn tại hoặc đã bị xóa"
+                                    />
+                                </div>
+                            ) : lecture.lectureOnlineLink ? (
+                                <iframe
+                                    src={lecture.lectureOnlineLink}
+                                    className="w-full h-full border-0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    title={lecture.title}
+                                    scrolling="yes"
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        overflow: 'auto'
+                                    }}
                                 />
-                            </div>
-                        ) : !lecture ? (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <LectureEmptyComponent
-                                    title="Không tìm thấy bài giảng"
-                                    description="Bài giảng không tồn tại hoặc đã bị xóa"
-                                />
-                            </div>
-                        ) : lecture.lectureOnlineLink ? (
-                            <iframe
-                                src={lecture.lectureOnlineLink}
-                                className="w-full h-full border-0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title={lecture.title}
-                            />
-                        ) : (
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                <LectureEmptyComponent
-                                    title="Chưa có liên kết bài giảng"
-                                    description="Bài giảng này chưa có nội dung trực tuyến"
-                                />
-                            </div>
-                        )}
+                            ) : (
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <LectureEmptyComponent
+                                        title="Chưa có liên kết bài giảng"
+                                        description="Bài giảng này chưa có nội dung trực tuyến"
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -77,7 +77,7 @@ const SubjectPage = () => {
     const isError = isErrorCategories || isErrorLessons;
 
     return (
-        <div className="min-h-screen bg-white pt-28 relative">
+        <div className="min-h-screen bg-white pt-20 relative">
             {/* Main Content */}
             <div style={{ backgroundImage: 'url("/images/lectures/bg_lectures.png")' }} className="w-full min-h-screen bg-cover bg-center bg-no-repeat ">
 
@@ -91,7 +91,7 @@ const SubjectPage = () => {
                     )}
 
                     {/* Left column: overview + category */}
-                    <aside className={`fixed top-0 bottom-0 left-0 z-999 lg:z-auto w-[85vw] max-w-[340px] lg:w-[340px] shrink-0 lg:sticky lg:top-28 self-start h-screen lg:h-[calc(100vh-7rem)] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+                    <aside className={`fixed top-0 bottom-0 left-0 z-999 lg:z-auto w-[85vw] max-w-[340px] lg:w-[340px] shrink-0 lg:sticky lg:top-20 self-start h-screen lg:h-[calc(100vh-7rem)] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
                         }`}>
                         <div className="bg-white border border-gray-200 p-5 h-full flex flex-col overflow-hidden shadow-xl lg:shadow-none">
                             <div className="shrink-0">
