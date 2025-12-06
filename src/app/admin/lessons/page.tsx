@@ -12,25 +12,25 @@ interface Lesson {
     bookId: number;
     topicId: number;
     lectureUrl?: string;
-    grade?: { name: string };
-    subject?: { name: string };
-    book?: { name: string };
+    grade?: { gradeName: string };
+    subject?: { subjectName: string };
+    book?: { bookName: string };
     topic?: { topicName: string };
 }
 
 interface Grade {
     id: number;
-    name: string;
+    gradeName: string;
 }
 
 interface Subject {
     id: number;
-    name: string;
+    subjectName: string;
 }
 
 interface Book {
     id: number;
-    name: string;
+    bookName: string;
 }
 
 interface Topic {
@@ -296,17 +296,17 @@ const LessonsPage = () => {
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-sm">
-                                                    {lesson.grade?.name || 'N/A'}
+                                                    {lesson.grade?.gradeName || 'N/A'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="px-3 py-1 rounded-full bg-green-500/20 text-green-300 text-sm">
-                                                    {lesson.subject?.name || 'N/A'}
+                                                    {lesson.subject?.subjectName || 'N/A'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <span className="px-3 py-1 rounded-full bg-orange-500/20 text-orange-300 text-sm">
-                                                    {lesson.book?.name || 'N/A'}
+                                                    {lesson.book?.bookName || 'N/A'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
@@ -391,7 +391,7 @@ const LessonsPage = () => {
                                         <option value="">Chọn khối lớp</option>
                                         {grades.map((grade) => (
                                             <option key={grade.id} value={grade.id}>
-                                                {grade.name}
+                                                {grade.gradeName}
                                             </option>
                                         ))}
                                     </select>
@@ -411,7 +411,7 @@ const LessonsPage = () => {
                                         <option value="">Chọn môn học</option>
                                         {subjects.map((subject) => (
                                             <option key={subject.id} value={subject.id}>
-                                                {subject.name}
+                                                {subject.subjectName}
                                             </option>
                                         ))}
                                     </select>
@@ -431,7 +431,7 @@ const LessonsPage = () => {
                                         <option value="">Chọn sách</option>
                                         {books.map((book) => (
                                             <option key={book.id} value={book.id}>
-                                                {book.name}
+                                                {book.bookName}
                                             </option>
                                         ))}
                                     </select>
