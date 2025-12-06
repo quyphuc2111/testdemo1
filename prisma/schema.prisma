@@ -75,7 +75,6 @@ model Topic {
 
   lessons Lesson[]
 
-  @@unique([topicName, gradeId, subjectId, bookId])
 }
 
 model Lesson {
@@ -94,5 +93,5 @@ model Lesson {
   book    Book    @relation(fields: [bookId], references: [id])
   topic   Topic   @relation(fields: [topicId], references: [id])
 
-  @@unique([topicId])
+
 }
